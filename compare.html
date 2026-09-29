@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сравнение & Инструменты — UniGuide KZ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#eef2ff', 100: '#e0e7ff', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-brand-600/30">U</a>
+        <a href="index.html" class="text-xl font-bold text-slate-900">UniGuide <span class="text-brand-600">KZ</span></a>
+      </div>
+      <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-600">
+        <a href="index.html" class="hover:text-brand-600 transition">Главная</a>
+        <a href="universities.html" class="hover:text-brand-600 transition">Университеты</a>
+        <a href="compare.html" class="text-brand-600 font-semibold transition">Сравнение & Инструменты</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="universities.html" class="text-xs bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-xl font-semibold text-slate-700 transition">
+          + Добавить вуз
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Вкладки инструментов -->
+  <div class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex overflow-x-auto gap-8 text-sm font-semibold">
+      <button onclick="switchTab('tabCompare')" id="btn-tabCompare" class="py-4 border-b-2 border-brand-600 text-brand-600 transition whitespace-nowrap">Сравнение (2-3 вуза)</button>
+      <button onclick="switchTab('tabCalc')" id="btn-tabCalc" class="py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition whitespace-nowrap">Калькулятор ЕНТ</button>
+      <button onclick="switchTab('tabQuiz')" id="btn-tabQuiz" class="py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition whitespace-nowrap">Тест профориентации</button>
+      <button onclick="switchTab('tabFavs')" id="btn-tabFavs" class="py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition whitespace-nowrap">Избранное</button>
+      <button onclick="switchTab('tabAdmin')" id="btn-tabAdmin" class="py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition whitespace-nowrap">Управление / Демо-админ</button>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
+
+    <!-- TAB 1: СРАВНЕНИЕ -->
+    <section id="tabCompare" class="tab-pane">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">Сравнительный анализ</h2>
+          <p class="text-xs text-slate-500 mt-1">Объективное сопоставление выбранных университетов (до 3 вузов)</p>
+        </div>
+        <button onclick="clearCompare()" class="text-xs font-semibold text-rose-600 hover:text-rose-700 flex items-center gap-1">
+          <i data-lucide="trash-2" class="w-4 h-4"></i> Очистить список
+        </button>
+      </div>
+
+      <div class="overflow-x-auto bg-white rounded-2xl border border-slate-200 shadow-sm" id="compareContainer">
+        <!-- Таблица рендерится JS -->
+      </div>
+    </section>
+
+    <!-- TAB 2: КАЛЬКУЛЯТОР ПОСТУПЛЕНИЯ -->
+    <section id="tabCalc" class="tab-pane hidden max-w-2xl mx-auto">
+      <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+        <h2 class="text-2xl font-bold text-slate-900 mb-2">Калькулятор шансов поступления</h2>
+        <p class="text-xs text-slate-500 mb-6 leading-relaxed">Введите ваши прогнозируемые баллы ЕНТ и предпочтительный город, чтобы получить рекомендацию.</p>
+
+        <form id="calcForm" onsubmit="calculateChances(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Ваш балл ЕНТ (макс. 140)</label>
+            <input type="number" id="entScore" min="50" max="140" required placeholder="Например: 112" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-600">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Направление</label>
+            <select id="calcMajor" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
+              <option value="it">Информационные технологии & CS</option>
+              <option value="law">Юриспруденция и право</option>
+              <option value="biz">Экономика, финансы и менеджмент</option>
+              <option value="eng">Инженерия и промышленность</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Желаемый город</label>
+            <select id="calcCity" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
+              <option value="any">Любой город РК</option>
+              <option value="Астана">Астана</option>
+              <option value="Алматы">Алматы</option>
+              <option value="Караганда">Караганда</option>
+            </select>
+          </div>
+          <button type="submit" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition">
+            Рассчитать шансы
+          </button>
+        </form>
+
+        <div id="calcResult" class="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200 hidden">
+          <!-- Результаты расчета -->
+        </div>
+
+        <p class="text-[11px] text-slate-400 mt-4 leading-relaxed">
+          * Внимание: Результат носит ознакомительный характер на основе демонстрационных проходных баллов прошлых лет. Актуальные условия уточняйте в приемных комиссиях.
+        </p>
+      </div>
+    </section>
+
+    <!-- TAB 3: ПРОФОРИЕНТАЦИОННЫЙ ТЕСТ -->
+    <section id="tabQuiz" class="tab-pane hidden max-w-2xl mx-auto">
+      <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm" id="quizBox">
+        <h2 class="text-2xl font-bold text-slate-900 mb-2">Экспресс-тест на профориентацию</h2>
+        <p class="text-xs text-slate-500 mb-6">Ответьте на 3 вопроса, чтобы определить подходящую сферу для обучения в Казахстане.</p>
+
+        <div id="quizContent">
+          <!-- Вопросы генерируются JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: ИЗБРАННОЕ -->
+    <section id="tabFavs" class="tab-pane hidden">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Сохраненные университеты</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="favsContainer">
+        <!-- Избранные вузы -->
+      </div>
+    </section>
+
+    <!-- TAB 5: ДЕМО-АДМИНКА -->
+    <section id="tabAdmin" class="tab-pane hidden">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">Панель управления университетами</h2>
+          <p class="text-xs text-slate-500 mt-1">Добавление, редактирование и удаление вузов (демонстрационная база)</p>
+        </div>
+        <button onclick="resetDb()" class="text-xs bg-slate-200 hover:bg-slate-300 px-3 py-2 rounded-lg text-slate-800 font-semibold">
+          Восстановить стандартную базу
+        </button>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-50 text-slate-500 uppercase tracking-wider border-b border-slate-200">
+            <tr>
+              <th class="p-4">Название</th>
+              <th class="p-4">Город</th>
+              <th class="p-4">Рейтинг</th>
+              <th class="p-4 text-right">Действие</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody" class="divide-y divide-slate-100">
+            <!-- Список для удаления/управления -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+
+      document.querySelectorAll('[id^="btn-"]').forEach(btn => {
+        btn.classList.remove('border-brand-600', 'text-brand-600');
+        btn.classList.add('border-transparent', 'text-slate-500');
+      });
+
+      const activeBtn = document.getElementById(`btn-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('border-brand-600', 'text-brand-600');
+        activeBtn.classList.remove('border-transparent', 'text-slate-500');
+      }
+
+      if (tabId === 'tabCompare') renderCompare();
+      if (tabId === 'tabFavs') renderFavs();
+      if (tabId === 'tabAdmin') renderAdmin();
+      if (tabId === 'tabQuiz') initQuiz();
+      lucide.createIcons();
+    }
+
+    function getUnis() {
+      return JSON.parse(localStorage.getItem('uniguide_unis_data') || '[]');
+    }
+
+    // Рендер таблицы сравнения
+    function renderCompare() {
+      const compareIds = JSON.parse(localStorage.getItem('uniguide_compare') || '[]');
+      const allUnis = getUnis();
+      const unis = allUnis.filter(u => compareIds.includes(u.id));
+      const container = document.getElementById('compareContainer');
+
+      if (unis.length === 0) {
+        container.innerHTML = `
+          <div class="p-12 text-center text-slate-500">
+            <i data-lucide="scale" class="w-10 h-10 mx-auto text-slate-300 mb-3"></i>
+            <p class="font-semibold text-slate-700">Список сравнения пуст</p>
+            <p class="text-xs text-slate-400 mt-1">Перейдите в каталог и добавьте 2 или 3 университета для анализа</p>
+            <a href="universities.html" class="inline-block mt-4 px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-semibold">В каталог</a>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = `
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-200">
+              <th class="p-4 w-44 font-bold text-slate-500 uppercase tracking-wider">Параметр</th>
+              ${unis.map(u => `
+                <th class="p-4 font-bold text-slate-900 border-l border-slate-200">
+                  <div class="flex items-center justify-between">
+                    <span>${u.name}</span>
+                    <button onclick="removeFromCompare('${u.id}')" class="text-slate-400 hover:text-rose-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+                  </div>
+                </th>
+              `).join('')}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="p-4 font-semibold text-slate-600 bg-slate-50/50">Город</td>
+              ${unis.map(u => `<td class="p-4 border-l border-slate-200 font-medium">${u.city}</td>`).join('')}
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-slate-600 bg-slate-50/50">Тип управления</td>
+              ${unis.map(u => `<td class="p-4 border-l border-slate-200">${u.type}</td>`).join('')}
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-slate-600 bg-slate-50/50">Стоимость в год</td>
+              ${unis.map(u => `<td class="p-4 border-l border-slate-200 font-semibold text-slate-800">${u.cost}</td>`).join('')}
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-slate-600 bg-slate-50/50">Возможности гранта</td>
+              ${unis.map(u => `<td class="p-4 border-l border-slate-200 text-emerald-700 font-medium">${u.grant}</td>`).join('')}
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-slate-600 bg-slate-50/50">Число программ</td>
+              ${unis.map(u => `<td class="p-4 border-l border-slate-200 font-bold">${u.programsCount}</td>`).join('')}
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-slate-600 bg-slate-50/50">Рейтинг пользователей</td>
+              ${unis.map(u => `<td class="p-4 border-l border-slate-200 font-bold text-amber-600">★ ${u.rating}</td>`).join('')}
+            </tr>
+          </tbody>
+        </table>
+      `;
+      lucide.createIcons();
+    }
+
+    function removeFromCompare(id) {
+      let list = JSON.parse(localStorage.getItem('uniguide_compare') || '[]');
+      list = list.filter(item => item !== id);
+      localStorage.setItem('uniguide_compare', JSON.stringify(list));
+      renderCompare();
+    }
+
+    function clearCompare() {
+      localStorage.removeItem('uniguide_compare');
+      renderCompare();
+    }
+
+    // Калькулятор ЕНТ
+    function calculateChances(e) {
+      e.preventDefault();
+      const score = parseInt(document.getElementById('entScore').value);
+      const city = document.getElementById('calcCity').value;
+      const resBox = document.getElementById('calcResult');
+
+      let status = "";
+      let colorClass = "";
+      let recommendations = "";
+
+      if (score >= 120) {
+        status = "Высокая вероятность гранта";
+        colorClass = "text-emerald-700 bg-emerald-50 border-emerald-200";
+        recommendations = "Nazarbayev University (внутренний конкурс), KIMEP, MNU, Satbayev University.";
+      } else if (score >= 90) {
+        status = "Уверенные шансы на государственный грант";
+        colorClass = "text-brand-700 bg-brand-50 border-brand-200";
+        recommendations = "ЕНУ им. Гумилева, SDU, КарУ им. Букетова, Satbayev University.";
+      } else {
+        status = "Платное отделение или региональный грант";
+        colorClass = "text-amber-700 bg-amber-50 border-amber-200";
+        recommendations = "Региональные университеты, внутренние скидки по результатам собеседования.";
+      }
+
+      resBox.className = `mt-6 p-4 rounded-xl border ${colorClass}`;
+      resBox.innerHTML = `
+        <div class="font-bold text-sm mb-1">${status} (${score} баллов)</div>
+        <p class="text-xs leading-relaxed">Рекомендуемые демонстрационные варианты (${city === 'any' ? 'все города' : city}): <strong>${recommendations}</strong></p>
+      `;
+      resBox.classList.remove('hidden');
+    }
+
+    // Экспресс-тест
+    const quizQuestions = [
+      {
+        q: "1. Какая сфера деятельности привлекает вас больше всего?",
+        options: [
+          { text: "Создавать программы, приложения и алгоритмы", track: "IT & Разработка" },
+          { text: "Защищать права людей и разбирать законы", track: "Юриспруденция" },
+          { text: "Инвестиции, аналитика рынка и построение бизнеса", track: "Финансы и Бизнес" }
+        ]
+      },
+      {
+        q: "2. Какой формат работы для вас идеален?",
+        options: [
+          { text: "Удаленно за мощным ноутбуком в любой точке мира", track: "IT & Разработка" },
+          { text: "Судебные процессы, переговоры и составление договоров", track: "Юриспруденция" },
+          { text: "Аналитические отчеты, презентации для инвесторов", track: "Финансы и Бизнес" }
+        ]
+      }
+    ];
+
+    let currentQ = 0;
+    let selectedTracks = [];
+
+    function initQuiz() {
+      currentQ = 0;
+      selectedTracks = [];
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const box = document.getElementById('quizContent');
+      if (currentQ < quizQuestions.length) {
+        const item = quizQuestions[currentQ];
+        box.innerHTML = `
+          <h3 class="font-bold text-sm text-slate-800 mb-4">${item.q}</h3>
+          <div class="space-y-3">
+            ${item.options.map((opt, i) => `
+              <button onclick="answerQuiz('${opt.track}')" class="w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-brand-600 hover:bg-brand-50/50 text-xs font-medium text-slate-700 transition">
+                ${opt.text}
+              </button>
+            `).join('')}
+          </div>
+        `;
+      } else {
+        const resultTrack = selectedTracks[0] || "Современные междисциплинарные программы";
+        box.innerHTML = `
+          <div class="p-6 bg-brand-50 rounded-xl border border-brand-100 text-center">
+            <i data-lucide="award" class="w-10 h-10 text-brand-600 mx-auto mb-2"></i>
+            <h3 class="font-bold text-base text-slate-900">Рекомендуемое направление: ${resultTrack}</h3>
+            <p class="text-xs text-slate-600 mt-2">Результат теста носит ознакомительный характер. Рекомендуем ознакомиться со специальностями в нашем каталоге.</p>
+            <button onclick="initQuiz()" class="mt-4 px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-semibold">Пройти заново</button>
+          </div>
+        `;
+        lucide.createIcons();
+      }
+    }
+
+    function answerQuiz(track) {
+      selectedTracks.push(track);
+      currentQ++;
+      showQuestion();
+    }
+
+    // Избранное
+    function renderFavs() {
+      const favIds = JSON.parse(localStorage.getItem('uniguide_favorites') || '[]');
+      const allUnis = getUnis();
+      const favUnis = allUnis.filter(u => favIds.includes(u.id));
+      const box = document.getElementById('favsContainer');
+
+      if (favUnis.length === 0) {
+        box.innerHTML = `<p class="col-span-full py-12 text-center text-slate-400 text-xs">В избранном пока ничего нет. Нажмите сердечко в каталоге.</p>`;
+        return;
+      }
+
+      box.innerHTML = favUnis.map(u => `
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <h4 class="font-bold text-slate-900 text-sm">${u.name}</h4>
+            <p class="text-xs text-slate-500">${u.city} • ${u.rating} ★</p>
+          </div>
+          <a href="universities.html?id=${u.id}" class="text-xs font-semibold text-brand-600 hover:underline">Подробнее</a>
+        </div>
+      `).join('');
+    }
+
+    // Демо-админка
+    function renderAdmin() {
+      const unis = getUnis();
+      const tbody = document.getElementById('adminTableBody');
+      tbody.innerHTML = unis.map(u => `
+        <tr class="hover:bg-slate-50">
+          <td class="p-4 font-semibold text-slate-800">${u.name}</td>
+          <td class="p-4 text-slate-600">${u.city}</td>
+          <td class="p-4 font-bold text-amber-600">${u.rating}</td>
+          <td class="p-4 text-right">
+            <button onclick="deleteUni('${u.id}')" class="text-rose-600 hover:text-rose-800 font-semibold">Удалить</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function deleteUni(id) {
+      if (confirm('Удалить данный вуз из демонстрационной базы?')) {
+        let unis = getUnis().filter(u => u.id !== id);
+        localStorage.setItem('uniguide_unis_data', JSON.stringify(unis));
+        renderAdmin();
+      }
+    }
+
+    function resetDb() {
+      localStorage.removeItem('uniguide_unis_data');
+      location.reload();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash;
+      if (hash === '#calculator') switchTab('tabCalc');
+      else if (hash === '#quiz') switchTab('tabQuiz');
+      else if (hash === '#favorites') switchTab('tabFavs');
+      else switchTab('tabCompare');
+    });
+  </script>
+</body>
+</html>

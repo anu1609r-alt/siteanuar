@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог университетов РК — UniGuide KZ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#eef2ff', 100: '#e0e7ff', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-brand-600/30">U</a>
+        <a href="index.html" class="text-xl font-bold text-slate-900">UniGuide <span class="text-brand-600">KZ</span></a>
+      </div>
+      <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-600">
+        <a href="index.html" class="hover:text-brand-600 transition">Главная</a>
+        <a href="universities.html" class="text-brand-600 font-semibold transition">Университеты</a>
+        <a href="compare.html" class="hover:text-brand-600 transition">Сравнение & Инструменты</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="compare.html#favorites" class="p-2.5 rounded-full hover:bg-slate-100 text-slate-600 relative">
+          <i data-lucide="heart" class="w-5 h-5"></i>
+          <span id="favCount" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Title & Search Bar -->
+  <div class="bg-white border-b border-slate-200 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-extrabold text-slate-900">Университеты Казахстана</h1>
+      <p class="text-slate-500 text-sm mt-1">Исследуйте вузы, фильтруйте по городам и читайте честные отзывы студентов</p>
+
+      <div class="mt-6 flex flex-col md:flex-row gap-4">
+        <div class="relative flex-1">
+          <i data-lucide="search" class="w-5 h-5 absolute left-3.5 top-3 text-slate-400"></i>
+          <input type="text" id="searchInput" placeholder="Поиск по названию или описанию..." class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-600/20 focus:border-brand-600 text-sm">
+        </div>
+        <select id="cityFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-600">
+          <option value="all">Все города</option>
+          <option value="Астана">Астана</option>
+          <option value="Алматы">Алматы</option>
+          <option value="Караганда">Караганда</option>
+        </select>
+        <select id="sortFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-600">
+          <option value="rating">По рейтингу</option>
+          <option value="programs">По числу программ</option>
+          <option value="name">По алфавиту</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="unisList">
+      <!-- Динамический список вузов -->
+    </div>
+  </main>
+
+  <!-- Modal: Детали вуза и Отзывы -->
+  <div id="uniModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 flex flex-col">
+      <div class="relative h-64 bg-slate-100 flex-shrink-0">
+        <img id="modalImg" src="" alt="Uni" class="w-full h-full object-cover">
+        <button onclick="closeModal()" class="absolute top-4 right-4 bg-white/90 p-2 rounded-full hover:bg-white text-slate-700 shadow">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div class="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-sm px-3.5 py-1.5 rounded-lg text-white font-semibold text-xs" id="modalCityBadge">
+          Город
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8 flex-1">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 id="modalTitle" class="text-2xl font-bold text-slate-900">Название</h2>
+            <p id="modalType" class="text-xs text-slate-500 mt-1">Тип</p>
+          </div>
+          <div class="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-xl font-bold text-sm">
+            <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i> <span id="modalRating">0.0</span>
+          </div>
+        </div>
+
+        <p id="modalDesc" class="text-sm text-slate-600 mt-4 leading-relaxed"></p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 my-6 p-4 bg-slate-50 rounded-xl text-xs">
+          <div>
+            <span class="text-slate-400 block">Стоимость:</span>
+            <span id="modalCost" class="font-semibold text-slate-800"></span>
+          </div>
+          <div>
+            <span class="text-slate-400 block">Гранты:</span>
+            <span id="modalGrant" class="font-semibold text-emerald-700"></span>
+          </div>
+          <div>
+            <span class="text-slate-400 block">Программ:</span>
+            <span id="modalPrograms" class="font-semibold text-slate-800"></span>
+          </div>
+        </div>
+
+        <!-- Секция отзывов -->
+        <div class="border-t border-slate-200 pt-6 mt-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="message-square" class="w-5 h-5 text-brand-600"></i> Отзывы студентов
+            </h3>
+            <span class="text-xs text-slate-500" id="reviewsCountBadge">0 отзывов</span>
+          </div>
+
+          <!-- Список отзывов -->
+          <div class="space-y-3 mb-6" id="reviewsContainer">
+            <!-- Отзывы генерируются js -->
+          </div>
+
+          <!-- Форма добавления отзыва -->
+          <form id="reviewForm" class="bg-slate-50 p-4 rounded-xl border border-slate-200" onsubmit="handleReviewSubmit(event)">
+            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Оставить свой отзыв</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+              <input type="text" id="reviewerName" placeholder="Ваше имя / курс" required class="px-3 py-2 rounded-lg border border-slate-200 text-xs w-full">
+              <select id="reviewerRating" class="px-3 py-2 rounded-lg border border-slate-200 text-xs w-full bg-white">
+                <option value="5">5 звезд — Отлично</option>
+                <option value="4">4 звезды — Хорошо</option>
+                <option value="3">3 звезды — Нормально</option>
+                <option value="2">2 звезды — Есть проблемы</option>
+                <option value="1">1 звезда — Не рекомендую</option>
+              </select>
+            </div>
+            <textarea id="reviewerText" rows="3" placeholder="Расскажите об общежитиях, преподавателях, практике и атмосфере..." required class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs mb-3"></textarea>
+            <button type="submit" class="w-full py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs transition">
+              Опубликовать отзыв
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fullUnis = [
+      {
+        id: "nu",
+        name: "Nazarbayev University",
+        shortName: "NU",
+        city: "Астана",
+        type: "Автономный исследовательский",
+        cost: "От 4 500 000 ₸ / год (или грант)",
+        grant: "Внутренний грант NUET",
+        rating: 4.9,
+        programsCount: 28,
+        image: "images/nu.jpg",
+        description: "Флагман высшего образования Казахстана. Обучение на английском языке, передовые лаборатории и преподаватели со всего мира.",
+        reviews: [
+          { author: "Алишер (3 курс, CS)", rating: 5, date: "15.09.2026", text: "Академическая нагрузка колоссальная, но возможности трудоустройства в мировые IT-гиганты окупают все бессонные ночи." },
+          { author: "Дана (выпускница)", rating: 5, date: "02.08.2026", text: "Лучший кампус в Центральной Азии. Студенческое самоуправление действительно работает." }
+        ]
+      },
+      {
+        id: "mnu",
+        name: "Maqsut Narikbayev University",
+        shortName: "MNU",
+        city: "Астана",
+        type: "Корпоративный",
+        cost: "От 1 800 000 ₸ / год",
+        grant: "Государственный и ректорский",
+        rating: 4.8,
+        programsCount: 22,
+        image: "images/mnu.jpg",
+        description: "Высочайший уровень подготовки в области юриспруденции, дипломатии и бизнеса с международной аккредитацией FIBAA.",
+        reviews: [
+          { author: "Ерлан (Юриспруденция)", rating: 5, date: "10.09.2026", text: "Сильнейшая школа судебной практики. Преподают реальные действующие судьи и адвокаты." }
+        ]
+      },
+      {
+        id: "enu",
+        name: "L.N. Gumilyov ENU",
+        shortName: "ЕНУ им. Гумилева",
+        city: "Астана",
+        type: "Национальный",
+        cost: "От 1 100 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.6,
+        programsCount: 65,
+        image: "images/enu.jpg",
+        description: "Классический национальный университет в центре столицы с сильной базой точных наук и филологии.",
+        reviews: [
+          { author: "Айгерим (IT-факультет)", rating: 4, date: "20.08.2026", text: "Большое количество грантов, хорошие преподаватели старой школы, но в общежитиях иногда тесновато." }
+        ]
+      },
+      {
+        id: "satbayev",
+        name: "Satbayev University",
+        shortName: "Политех",
+        city: "Алматы",
+        type: "Национальный исследовательский",
+        cost: "От 1 200 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.7,
+        programsCount: 54,
+        image: "images/satbayev.jpg",
+        description: "Старейший и авторитетнейший политехнический университет Казахстана: горное дело, робототехника, AI и архитектура.",
+        reviews: [
+          { author: "Бахтияр (Инженерия)", rating: 5, date: "05.09.2026", text: "В Алматы для инженеров альтернатив нет. Прямые стажировки в крупных промышленных компаниях." }
+        ]
+      },
+      {
+        id: "kimep",
+        name: "KIMEP University",
+        shortName: "КИМЭП",
+        city: "Алматы",
+        type: "Частный / Международный",
+        cost: "От 3 200 000 ₸ / год",
+        grant: "Стипендии и скидки за ЕНТ",
+        rating: 4.8,
+        programsCount: 19,
+        image: "images/kimep.jpg",
+        description: "Североамериканская модель образования в самом сердце Алматы. Лидер бизнес-образования, финансов и маркетинга.",
+        reviews: [
+          { author: "Мадина (Финансы)", rating: 5, date: "11.09.2026", text: "Нетворкинг решает всё. Большинство однокурсников на 4 курсе уже работают в Big 4." }
+        ]
+      },
+      {
+        id: "sdu",
+        name: "SDU University",
+        shortName: "СДУ",
+        city: "Алматы",
+        type: "Частный",
+        cost: "От 1 900 000 ₸ / год",
+        grant: "Внутренние олимпиады и гранты РК",
+        rating: 4.7,
+        programsCount: 30,
+        image: "images/sdu.jpg",
+        description: "Известен мощнейшей школой олимпиадного программирования, уютным загородным кампусом и сильной языковой подготовкой.",
+        reviews: [
+          { author: "Темирлан (Computer Science)", rating: 5, date: "01.09.2026", text: "Атмосфера кампуса в Каскелене неповторимая. Студенческая жизнь бурлит 24/7." }
+        ]
+      },
+      {
+        id: "buketov",
+        name: "Karaganda Buketov University",
+        shortName: "КарУ им. Букетова",
+        city: "Караганда",
+        type: "Классический региональный",
+        cost: "От 850 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.5,
+        programsCount: 50,
+        image: "images/buketov.jpg",
+        description: "Крупнейший научно-образовательный центр Центрального Казахстана с сильными традициями фундаментальных наук.",
+        reviews: [
+          { author: "Светлана (Педагогика)", rating: 4, date: "18.07.2026", text: "Доступная стоимость, отличные методисты и очень сильная практика в школах региона." }
+        ]
+      }
+    ];
+
+    let currentModalUniId = null;
+
+    // Инициализация отзывов в localStorage
+    function getStoredUnis() {
+      const stored = localStorage.getItem('uniguide_unis_data');
+      if (stored) return JSON.parse(stored);
+      localStorage.setItem('uniguide_unis_data', JSON.stringify(fullUnis));
+      return fullUnis;
+    }
+
+    function renderCards() {
+      const unis = getStoredUnis();
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const city = document.getElementById('cityFilter').value;
+      const sort = document.getElementById('sortFilter').value;
+      const favs = JSON.parse(localStorage.getItem('uniguide_favorites') || '[]');
+
+      let filtered = unis.filter(u => {
+        const matchesSearch = u.name.toLowerCase().includes(search) || u.description.toLowerCase().includes(search);
+        const matchesCity = (city === 'all') || (u.city === city);
+        return matchesSearch && matchesCity;
+      });
+
+      if (sort === 'rating') filtered.sort((a,b) => b.rating - a.rating);
+      if (sort === 'programs') filtered.sort((a,b) => b.programsCount - a.programsCount);
+      if (sort === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
+
+      const container = document.getElementById('unisList');
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="col-span-full py-16 text-center text-slate-400">Университетов по заданным параметрам не найдено</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(uni => {
+        const isFav = favs.includes(uni.id);
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col">
+            <div class="relative h-44 bg-slate-100">
+              <img src="${uni.image}" alt="${uni.name}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80'">
+              <button onclick="toggleFavorite('${uni.id}')" class="absolute top-3 right-3 p-2 rounded-full ${isFav ? 'bg-rose-50 text-rose-500' : 'bg-white/90 text-slate-500'} hover:scale-110 transition shadow">
+                <i data-lucide="heart" class="w-4 h-4 ${isFav ? 'fill-rose-500' : ''}"></i>
+              </button>
+              <div class="absolute bottom-3 left-3 bg-slate-900/80 px-2.5 py-1 rounded text-[11px] font-medium text-white">${uni.city}</div>
+            </div>
+            <div class="p-5 flex-1 flex flex-col">
+              <div class="flex items-start justify-between gap-2">
+                <h3 class="font-bold text-slate-900 text-base leading-snug">${uni.name}</h3>
+                <span class="flex items-center gap-1 text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">
+                  <i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500 text-amber-500"></i> ${uni.rating}
+                </span>
+              </div>
+              <p class="text-xs text-slate-500 mt-1">${uni.type}</p>
+              <p class="text-xs text-slate-600 mt-3 line-clamp-2 leading-relaxed flex-1">${uni.description}</p>
+              
+              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <span>Программ: <strong class="text-slate-800">${uni.programsCount}</strong></span>
+                <span>Отзывов: <strong class="text-slate-800">${uni.reviews ? uni.reviews.length : 0}</strong></span>
+              </div>
+
+              <div class="mt-4 flex gap-2">
+                <button onclick="openModal('${uni.id}')" class="flex-1 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-medium text-xs transition">
+                  Подробнее & Отзывы
+                </button>
+                <button onclick="addToCompare('${uni.id}')" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600" title="Добавить в сравнение">
+                  <i data-lucide="scale" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function openModal(id) {
+      currentModalUniId = id;
+      const unis = getStoredUnis();
+      const uni = unis.find(u => u.id === id);
+      if (!uni) return;
+
+      document.getElementById('modalTitle').textContent = uni.name;
+      document.getElementById('modalType').textContent = uni.type;
+      document.getElementById('modalCityBadge').textContent = uni.city;
+      document.getElementById('modalRating').textContent = uni.rating;
+      document.getElementById('modalDesc').textContent = uni.description;
+      document.getElementById('modalCost').textContent = uni.cost;
+      document.getElementById('modalGrant').textContent = uni.grant;
+      document.getElementById('modalPrograms').textContent = uni.programsCount;
+      document.getElementById('modalImg').src = uni.image;
+
+      renderReviews(uni.reviews || []);
+      document.getElementById('uniModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeModal() {
+      document.getElementById('uniModal').classList.add('hidden');
+      currentModalUniId = null;
+    }
+
+    function renderReviews(reviews) {
+      const container = document.getElementById('reviewsContainer');
+      document.getElementById('reviewsCountBadge').textContent = `${reviews.length} отзывов`;
+      if (reviews.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 py-3">Пока нет отзывов. Будьте первым!</p>`;
+        return;
+      }
+      container.innerHTML = reviews.map(r => `
+        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-bold text-slate-800">${r.author}</span>
+            <div class="flex items-center gap-1 text-amber-500 font-semibold">
+              <i data-lucide="star" class="w-3 h-3 fill-amber-500"></i> ${r.rating}
+              <span class="text-slate-400 text-[10px] ml-1 font-normal">${r.date}</span>
+            </div>
+          </div>
+          <p class="text-slate-600 mt-1 leading-relaxed">${r.text}</p>
+        </div>
+      `).join('');
+    }
+
+    function handleReviewSubmit(e) {
+      e.preventDefault();
+      if (!currentModalUniId) return;
+
+      const name = document.getElementById('reviewerName').value;
+      const rating = parseFloat(document.getElementById('reviewerRating').value);
+      const text = document.getElementById('reviewerText').value;
+
+      const unis = getStoredUnis();
+      const idx = unis.findIndex(u => u.id === currentModalUniId);
+      if (idx !== -1) {
+        const newReview = {
+          author: name,
+          rating: rating,
+          date: new Date().toLocaleDateString('ru-RU'),
+          text: text
+        };
+        unis[idx].reviews = unis[idx].reviews || [];
+        unis[idx].reviews.unshift(newReview);
+        localStorage.setItem('uniguide_unis_data', JSON.stringify(unis));
+
+        renderReviews(unis[idx].reviews);
+        document.getElementById('reviewForm').reset();
+        renderCards();
+      }
+    }
+
+    function toggleFavorite(id) {
+      let favs = JSON.parse(localStorage.getItem('uniguide_favorites') || '[]');
+      if (favs.includes(id)) {
+        favs = favs.filter(item => item !== id);
+      } else {
+        favs.push(id);
+      }
+      localStorage.setItem('uniguide_favorites', JSON.stringify(favs));
+      updateFavBadge();
+      renderCards();
+    }
+
+    function addToCompare(id) {
+      let list = JSON.parse(localStorage.getItem('uniguide_compare') || '[]');
+      if (!list.includes(id)) {
+        if (list.length >= 3) {
+          alert('В сравнение можно добавить максимум 3 университета.');
+          return;
+        }
+        list.push(id);
+        localStorage.setItem('uniguide_compare', JSON.stringify(list));
+        alert('Добавлено в таблицу сравнения!');
+      } else {
+        alert('Этот вуз уже добавлен в список сравнения.');
+      }
+    }
+
+    function updateFavBadge() {
+      const favs = JSON.parse(localStorage.getItem('uniguide_favorites') || '[]');
+      document.getElementById('favCount').textContent = favs.length;
+    }
+
+    document.getElementById('searchInput').addEventListener('input', renderCards);
+    document.getElementById('cityFilter').addEventListener('change', renderCards);
+    document.getElementById('sortFilter').addEventListener('change', renderCards);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCards();
+      updateFavBadge();
+      lucide.createIcons();
+
+      // Открытие модального окна по URL query parameter (например: ?id=nu)
+      const params = new URLSearchParams(window.location.search);
+      const openId = params.get('id');
+      if (openId) {
+        setTimeout(() => openModal(openId), 200);
+      }
+    });
+  </script>
+</body>
+</html>

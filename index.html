@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniGuide KZ — университеты и поступление в Казахстане</title>
+  <meta name="description" content="Платформа для абитуриентов Казахстана: поиск, сравнение университетов, проходные баллы и честные отзывы студентов.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased flex flex-col min-h-screen">
+
+  <!-- Header / Navigation -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-brand-600/30">
+          U
+        </div>
+        <div>
+          <a href="index.html" class="text-xl font-bold text-slate-900 tracking-tight">UniGuide <span class="text-brand-600">KZ</span></a>
+          <p class="text-[10px] text-slate-500 hidden sm:block uppercase tracking-wider font-semibold">Образовательный гид</p>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-600">
+        <a href="index.html" class="text-brand-600 font-semibold transition">Главная</a>
+        <a href="universities.html" class="hover:text-brand-600 transition">Университеты</a>
+        <a href="compare.html" class="hover:text-brand-600 transition">Сравнение & Инструменты</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="compare.html#favorites" class="p-2.5 rounded-full hover:bg-slate-100 text-slate-600 relative transition" title="Избранное">
+          <i data-lucide="heart" class="w-5 h-5"></i>
+          <span id="favCount" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+        </a>
+        <a href="compare.html#auth" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-medium text-sm shadow-md shadow-brand-600/20 transition flex items-center gap-2">
+          <i data-lucide="user" class="w-4 h-4"></i>
+          <span>Кабинет</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden bg-gradient-to-b from-brand-50/60 to-transparent py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-brand-100 text-brand-700 mb-6">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Поступление 2026/2027
+      </span>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight max-w-4xl mx-auto leading-tight">
+        Найди университет, который подходит <span class="text-brand-600 underline decoration-brand-200">именно тебе</span>
+      </h1>
+      <p class="mt-6 text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+        Сравнивай университеты Казахстана, читай реальные отзывы студентов, проверяй проходные баллы и выбирай свое будущее.
+      </p>
+
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="universities.html" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold shadow-lg shadow-brand-600/25 transition">
+          Каталог университетов
+        </a>
+        <a href="compare.html#calculator" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold shadow-sm transition flex items-center justify-center gap-2">
+          <i data-lucide="calculator" class="w-4 h-4"></i> Калькулятор шансов
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Statistics -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
+    <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-xl shadow-slate-100 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div>
+        <p class="text-3xl sm:text-4xl font-black text-brand-600">50+</p>
+        <p class="text-xs sm:text-sm font-medium text-slate-500 mt-1">Ведущих вузов РК</p>
+      </div>
+      <div>
+        <p class="text-3xl sm:text-4xl font-black text-brand-600">300+</p>
+        <p class="text-xs sm:text-sm font-medium text-slate-500 mt-1">Образовательных программ</p>
+      </div>
+      <div>
+        <p class="text-3xl sm:text-4xl font-black text-brand-600">20+</p>
+        <p class="text-xs sm:text-sm font-medium text-slate-500 mt-1">Городов Казахстана</p>
+      </div>
+      <div>
+        <p class="text-3xl sm:text-4xl font-black text-emerald-600">100%</p>
+        <p class="text-xs sm:text-sm font-medium text-slate-500 mt-1">Честные отзывы</p>
+      </div>
+    </div>
+    <p class="text-[11px] text-center text-slate-400 mt-2">* Демонстрационная сводка аналитической базы UniGuide KZ</p>
+  </section>
+
+  <!-- Popular Universities Carousel / Grid -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="flex items-center justify-between mb-10">
+      <div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Популярные университеты</h2>
+        <p class="text-sm text-slate-500 mt-1">Вузы с наибольшим интересом абитуриентов</p>
+      </div>
+      <a href="universities.html" class="text-sm font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1">
+        Все вузы <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="topUnisGrid">
+      <!-- Динамически заполняется скриптом -->
+    </div>
+  </section>
+
+  <!-- FAQ Section (Accordion) -->
+  <section class="bg-white border-t border-slate-200 py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-slate-900">Часто задаваемые вопросы</h2>
+        <p class="text-slate-500 mt-2 text-sm">Все нюансы работы платформы и правил поступления</p>
+      </div>
+
+      <div class="space-y-4" id="faqAccordion">
+        <div class="border border-slate-200 rounded-xl overflow-hidden">
+          <button onclick="toggleFaq(1)" class="w-full flex items-center justify-between p-5 text-left font-semibold text-slate-900 hover:bg-slate-50">
+            <span>Как формируются проходные баллы и гранты?</span>
+            <i data-lucide="chevron-down" id="faqIcon-1" class="w-5 h-5 transition-transform duration-200"></i>
+          </button>
+          <div id="faqAns-1" class="hidden p-5 pt-0 text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-slate-50/50">
+            Данные на сайте носят демонстрационно-аналитический характер, составленный на основе открытой статистики распределения государственных грантов МНВО РК прошлых лет. Всегда сверяйте пороговые баллы приемной комиссии на официальном ресурсе каждого вуза.
+          </div>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden">
+          <button onclick="toggleFaq(2)" class="w-full flex items-center justify-between p-5 text-left font-semibold text-slate-900 hover:bg-slate-50">
+            <span>Как добавить университет к сравнению?</span>
+            <i data-lucide="chevron-down" id="faqIcon-2" class="w-5 h-5 transition-transform duration-200"></i>
+          </button>
+          <div id="faqAns-2" class="hidden p-5 pt-0 text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-slate-50/50">
+            В каталоге или карточке любого вуза нажмите кнопку «Сравнить». После добавления 2 или 3 университетов перейдите на страницу «Сравнение & Инструменты», чтобы увидеть подробную сравнительную таблицу характеристик, грантов и цен.
+          </div>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden">
+          <button onclick="toggleFaq(3)" class="w-full flex items-center justify-between p-5 text-left font-semibold text-slate-900 hover:bg-slate-50">
+            <span>Кто оставляет отзывы об университетах?</span>
+            <i data-lucide="chevron-down" id="faqIcon-3" class="w-5 h-5 transition-transform duration-200"></i>
+          </button>
+          <div id="faqAns-3" class="hidden p-5 pt-0 text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-slate-50/50">
+            Отзывы могут оставлять студенты и выпускники через карточку университета. На платформе внедрена система модерации и пользовательских оценок по 5 критериям (инфраструктура, преподаватели, общежития, практика и карьера).
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="space-y-4">
+        <div class="flex items-center gap-2 text-white font-bold text-lg">
+          <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center">U</div>
+          UniGuide KZ
+        </div>
+        <p class="text-xs leading-relaxed text-slate-400">
+          Современная цифровая платформа для абитуриентов Республики Казахстан. Твой путь в университет начинается здесь.
+        </p>
+      </div>
+      <div>
+        <h4 class="text-white text-sm font-semibold mb-3">Платформа</h4>
+        <ul class="text-xs space-y-2">
+          <li><a href="universities.html" class="hover:text-white transition">Каталог вузов</a></li>
+          <li><a href="compare.html" class="hover:text-white transition">Сравнение университетов</a></li>
+          <li><a href="compare.html#calculator" class="hover:text-white transition">Калькулятор баллов ЕНТ</a></li>
+          <li><a href="compare.html#quiz" class="hover:text-white transition">Тест на профориентацию</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white text-sm font-semibold mb-3">Города</h4>
+        <ul class="text-xs space-y-2">
+          <li>Астана</li>
+          <li>Алматы</li>
+          <li>Шымкент</li>
+          <li>Караганда</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white text-sm font-semibold mb-3">Контакты & Право</h4>
+        <ul class="text-xs space-y-2">
+          <li>support@uniguide.kz</li>
+          <li>Астана, Казахстан</li>
+          <li><a href="#" class="hover:text-white">Политика конфиденциальности</a></li>
+          <li><a href="#" class="hover:text-white">Пользовательское соглашение</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 mt-8 border-t border-slate-800 text-center text-xs text-slate-500">
+      © 2026 UniGuide KZ. Все права защищены. Разработано в образовательных целях.
+    </div>
+  </footer>
+
+  <script>
+    // Базовые демонстрационные данные
+    const universitiesData = [
+      {
+        id: "nu",
+        name: "Nazarbayev University",
+        shortName: "NU",
+        city: "Астана",
+        type: "Автономный исследовательский",
+        cost: "От 4 500 000 ₸ / год (или госгрант NUET)",
+        grant: "Внутренний грант NU",
+        rating: 4.9,
+        programsCount: 28,
+        image: "images/nu.jpg",
+        description: "Флагман высшего образования Казахстана с международным профессорско-преподавательским составом."
+      },
+      {
+        id: "mnu",
+        name: "Maqsut Narikbayev University",
+        shortName: "MNU (KAZGUU)",
+        city: "Астана",
+        type: "Частный / Корпоративный",
+        cost: "От 1 800 000 ₸ / год",
+        grant: "Государственный и ректорский",
+        rating: 4.8,
+        programsCount: 22,
+        image: "images/mnu.jpg",
+        description: "Ведущий юридический и гуманитарно-экономический университет с аккредитациями FIBAA и CIMA."
+      },
+      {
+        id: "enu",
+        name: "L.N. Gumilyov Eurasian National University",
+        shortName: "ЕНУ им. Гумилева",
+        city: "Астана",
+        type: "Национальный",
+        cost: "От 1 100 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.6,
+        programsCount: 65,
+        image: "images/enu.jpg",
+        description: "Крупнейший национальный университет столицы с широким спектром естественно-научных и IT специальностей."
+      }
+    ];
+
+    function renderTopUnis() {
+      const container = document.getElementById('topUnisGrid');
+      container.innerHTML = universitiesData.map(uni => `
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+          <div class="relative h-48 bg-slate-100 overflow-hidden">
+            <img src="${uni.image}" alt="${uni.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80'">
+            <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-bold text-slate-800 flex items-center gap-1 shadow">
+              <i data-lucide="star" class="w-3.5 h-3.5 text-amber-500 fill-amber-500"></i> ${uni.rating}
+            </div>
+            <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-sm px-3 py-1 rounded-lg text-[11px] font-medium text-white">
+              ${uni.city}
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <h3 class="font-bold text-slate-900 text-lg leading-snug">${uni.name}</h3>
+            <p class="text-xs text-slate-500 mt-1">${uni.type}</p>
+            <p class="text-xs text-slate-600 mt-3 line-clamp-2 leading-relaxed flex-1">${uni.description}</p>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+              <span class="text-slate-500"><strong class="text-slate-700">${uni.programsCount}</strong> программ</span>
+              <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-medium">${uni.grant}</span>
+            </div>
+
+            <div class="mt-5 flex gap-2">
+              <a href="universities.html?id=${uni.id}" class="flex-1 text-center py-2.5 rounded-xl bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-semibold transition">
+                Подробнее и отзывы
+              </a>
+              <button onclick="addToCompare('${uni.id}')" class="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition" title="Сравнить">
+                <i data-lucide="scale" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function toggleFaq(id) {
+      const ans = document.getElementById(`faqAns-${id}`);
+      const icon = document.getElementById(`faqIcon-${id}`);
+      ans.classList.toggle('hidden');
+      icon.classList.toggle('rotate-180');
+    }
+
+    function addToCompare(id) {
+      let list = JSON.parse(localStorage.getItem('uniguide_compare') || '[]');
+      if (!list.includes(id)) {
+        if (list.length >= 3) {
+          alert('В сравнение можно добавить максимум 3 университета.');
+          return;
+        }
+        list.push(id);
+        localStorage.setItem('uniguide_compare', JSON.stringify(list));
+        alert('Университет добавлен в сравнение! Перейдите на страницу «Сравнение & Инструменты».');
+      } else {
+        alert('Этот университет уже в списке сравнения.');
+      }
+    }
+
+    function updateFavBadge() {
+      const favs = JSON.parse(localStorage.getItem('uniguide_favorites') || '[]');
+      document.getElementById('favCount').textContent = favs.length;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTopUnis();
+      updateFavBadge();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

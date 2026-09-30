@@ -47,7 +47,7 @@
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 class="text-3xl font-extrabold text-slate-900">Университеты Казахстана</h1>
-          <p class="text-slate-500 text-sm mt-1">Все ведущие вузы регионов Казахстана: сравнивайте условия, читайте отзывы и выбирайте специальность</p>
+          <p class="text-slate-500 text-sm mt-1">Фотографии кампусов, условия поступления, рейтинги и честные отзывы</p>
         </div>
         <span id="totalFoundBadge" class="self-start md:self-auto text-xs font-semibold px-3 py-1.5 bg-brand-50 text-brand-700 rounded-lg"></span>
       </div>
@@ -81,15 +81,15 @@
     </div>
   </div>
 
-  <!-- Main Content Layout -->
+  <!-- Cards Grid -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="unisList"></div>
   </main>
 
-  <!-- Modal: Детали вуза и Отзывы -->
+  <!-- Modal Details & Reviews -->
   <div id="uniModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 flex flex-col">
-      <div class="relative h-64 bg-slate-100 flex-shrink-0">
+      <div class="relative h-72 bg-slate-100 flex-shrink-0">
         <img id="modalImg" src="" alt="Uni" class="w-full h-full object-cover">
         <button onclick="closeModal()" class="absolute top-4 right-4 bg-white/90 p-2 rounded-full hover:bg-white text-slate-700 shadow">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -148,7 +148,7 @@
                 <option value="1">1 звезда — Не рекомендую</option>
               </select>
             </div>
-            <textarea id="reviewerText" rows="3" placeholder="Расскажите о преподавателях, общежитии, сессии и возможностях..." required class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs mb-3"></textarea>
+            <textarea id="reviewerText" rows="3" placeholder="Расскажите о качестве преподавания, общежитиях, практике и студенческой жизни..." required class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs mb-3"></textarea>
             <button type="submit" class="w-full py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs transition">
               Опубликовать отзыв
             </button>
@@ -171,6 +171,7 @@
         rating: 4.9,
         programsCount: 28,
         image: "images/nu.jpg",
+        fallback: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&auto=format&fit=crop&q=80",
         description: "Флагман высшего образования Казахстана. Обучение на английском языке, передовые лаборатории и профессора со всего мира.",
         reviews: [
           { author: "Алишер (CS)", rating: 5, date: "15.09.2026", text: "Высокая академическая планка, карьерные ярмарки с международными IT-компаниями." }
@@ -187,6 +188,7 @@
         rating: 4.8,
         programsCount: 24,
         image: "images/mnu.jpg",
+        fallback: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80",
         description: "Ведущая юридическая и гуманитарно-экономическая школа страны с международной аккредитацией FIBAA.",
         reviews: [
           { author: "Ерлан (Юрист)", rating: 5, date: "10.09.2026", text: "Сильная практическая подготовка и симуляции судебных процессов." }
@@ -203,6 +205,7 @@
         rating: 4.6,
         programsCount: 65,
         image: "images/enu.jpg",
+        fallback: "https://images.unsplash.com/photo-1562774053-701939374585?w=800&auto=format&fit=crop&q=80",
         description: "Крупнейший национальный университет столицы с широким спектром естественно-научных и IT специальностей.",
         reviews: [
           { author: "Айгерим", rating: 4, date: "20.08.2026", text: "Много грантовых мест, сильные кафедры точных наук." }
@@ -219,6 +222,7 @@
         rating: 4.8,
         programsCount: 14,
         image: "images/aitu.jpg",
+        fallback: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80",
         description: "Инновационный IT-вуз на территории EXPO: кибербезопасность, Software Engineering, AI и Data Science.",
         reviews: [
           { author: "Нурсултан", rating: 5, date: "12.09.2026", text: "Современное оборудование, тесная связь с резидентами Astana Hub." }
@@ -235,6 +239,7 @@
         rating: 4.7,
         programsCount: 16,
         image: "images/amu.jpg",
+        fallback: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?w=800&auto=format&fit=crop&q=80",
         description: "Главный центр подготовки врачей и фармацевтов столицы с собственной клинической базой.",
         reviews: [
           { author: "Динара", rating: 5, date: "02.09.2026", text: "Практика на базе Национального научного центра с ранних курсов." }
@@ -251,6 +256,7 @@
         rating: 4.8,
         programsCount: 85,
         image: "images/kaznu.jpg",
+        fallback: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=800&auto=format&fit=crop&q=80",
         description: "Старейший классический университет страны, лидер в глобальных академических рейтингах QS.",
         reviews: [
           { author: "Санжар", rating: 5, date: "14.09.2026", text: "Огромный красивый кампус 'Казгуград' и мощная фундаментальная наука." }
@@ -267,6 +273,7 @@
         rating: 4.7,
         programsCount: 54,
         image: "images/satbayev.jpg",
+        fallback: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80",
         description: "Ведущий технический университет РК: горное дело, металлургия, машиностроение, архитектура и робототехника.",
         reviews: [
           { author: "Бахтияр", rating: 5, date: "05.09.2026", text: "Прямые производственные стажировки в промышленных компаниях." }
@@ -283,6 +290,7 @@
         rating: 4.8,
         programsCount: 19,
         image: "images/kimep.jpg",
+        fallback: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&auto=format&fit=crop&q=80",
         description: "Североамериканская модель образования в центре Алматы. Лидер бизнес- и финансового образования.",
         reviews: [
           { author: "Мадина", rating: 5, date: "11.09.2026", text: "Мощный карьерный центр, нетворкинг и признание диплома за рубежом." }
@@ -299,6 +307,7 @@
         rating: 4.9,
         programsCount: 26,
         image: "images/kbtu.jpg",
+        fallback: "https://images.unsplash.com/photo-1519452635265-7b1fbfd1e4e0?w=800&auto=format&fit=crop&q=80",
         description: "Элитная подготовка специалистов в сферах Computer Science, нефтегаза и прикладной математики.",
         reviews: [
           { author: "Арман", rating: 5, date: "08.09.2026", text: "Выпускники работают в крупнейших IT-корпорациях мира." }
@@ -315,6 +324,7 @@
         rating: 4.7,
         programsCount: 30,
         image: "images/sdu.jpg",
+        fallback: "https://images.unsplash.com/photo-1492538368677-f6e0afe31dcc?w=800&auto=format&fit=crop&q=80",
         description: "Сильнейшая школа спортивного программирования, уютный загородный кампус и обучение на английском.",
         reviews: [
           { author: "Темирлан", rating: 5, date: "01.09.2026", text: "Атмосфера кампуса в Каскелене способствует учебе 24/7." }
@@ -331,6 +341,7 @@
         rating: 4.6,
         programsCount: 25,
         image: "images/narxoz.jpg",
+        fallback: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop&q=80",
         description: "Экономический вуз с современным эко-кампусом, аккредитацией QS Stars и британскими двойными дипломами.",
         reviews: [
           { author: "Асель", rating: 4, date: "16.08.2026", text: "Очень красивый кампус и развитая система кейс-чемпионатов." }
@@ -347,6 +358,7 @@
         rating: 4.7,
         programsCount: 18,
         image: "images/asfendiyarov.jpg",
+        fallback: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&auto=format&fit=crop&q=80",
         description: "Главная кузница врачебных кадров страны с вековой историей и широкой клинической базой.",
         reviews: [
           { author: "Камила", rating: 5, date: "24.08.2026", text: "Огромная клиническая практика и строгая врачебная дисциплина." }
@@ -363,6 +375,7 @@
         rating: 4.5,
         programsCount: 52,
         image: "images/buketov.jpg",
+        fallback: "https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?w=800&auto=format&fit=crop&q=80",
         description: "Многопрофильный научно-образовательный центр Центрального Казахстана: сильная педагогика и право.",
         reviews: [
           { author: "Светлана", rating: 4, date: "18.07.2026", text: "Доступная цена обучения и качественная методическая подготовка." }
@@ -379,9 +392,10 @@
         rating: 4.6,
         programsCount: 40,
         image: "images/kartu.jpg",
+        fallback: "https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=800&auto=format&fit=crop&q=80",
         description: "Ведущий инженерный вуз по подготовке кадров для горнодобывающей и металлургической отрасли.",
         reviews: [
-          { author: "Дмитрий", rating: 5, date: "09.09.2026", text: "Высокий спрос на выпускников на заводах и горнорудных комбинатах." }
+          { author: "Дмитрий", rating: 5, date: "09.09.2026", text: "Высокий спрос на выпускников на заводах и комбинатах." }
         ]
       },
       {
@@ -395,6 +409,7 @@
         rating: 4.5,
         programsCount: 60,
         image: "images/auezov.jpg",
+        fallback: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&auto=format&fit=crop&q=80",
         description: "Крупнейший университет южного Казахстана, обучающий свыше 20 тысяч студентов по десяткам направлений.",
         reviews: [
           { author: "Бауыржан", rating: 4, date: "22.08.2026", text: "Крупнейшая лабораторная база нефтехимии и материаловедения на юге." }
@@ -411,6 +426,7 @@
         rating: 4.4,
         programsCount: 45,
         image: "images/zhubanov.jpg",
+        fallback: "https://images.unsplash.com/photo-1498079022511-d15614cb1c02?w=800&auto=format&fit=crop&q=80",
         description: "Главный академический центр Западного Казахстана: филология, естествознание, IT и экономика.",
         reviews: [
           { author: "Азамат", rating: 4, date: "15.08.2026", text: "Развитые программы академической мобильности и обмена Erasmus+." }
@@ -427,6 +443,7 @@
         rating: 4.4,
         programsCount: 38,
         image: "images/shakarim.jpg",
+        fallback: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=800&auto=format&fit=crop&q=80",
         description: "Научный оплот области Абай с упором на биотехнологии, аграрные и гуманитарные науки.",
         reviews: [
           { author: "Арай", rating: 4, date: "10.07.2026", text: "Сильная лабораторная база по биотехнологиям." }
@@ -443,6 +460,7 @@
         rating: 4.5,
         programsCount: 42,
         image: "images/tou.jpg",
+        fallback: "https://images.unsplash.com/photo-1513258496099-48168024aec0?w=800&auto=format&fit=crop&q=80",
         description: "Региональный центр инженерной подготовки для энергетики, нефтехимии и металлургии.",
         reviews: [
           { author: "Максим", rating: 5, date: "14.08.2026", text: "Трудоустройство на электростанции и заводы региона гарантировано." }
@@ -459,6 +477,7 @@
         rating: 4.6,
         programsCount: 36,
         image: "images/vktu.jpg",
+        fallback: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=800&auto=format&fit=crop&q=80",
         description: "Технический флагман Восточного Казахстана: цветная металлургия, машиностроение и IT.",
         reviews: [
           { author: "Кирилл", rating: 5, date: "19.08.2026", text: "Сотрудничество с УМЗ и Казцинком дает возможность сразу работать по специальности." }
@@ -475,6 +494,7 @@
         rating: 4.5,
         programsCount: 20,
         image: "images/aung.jpg",
+        fallback: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&auto=format&fit=crop&q=80",
         description: "Специализированный нефтегазовый университет Казахстана для шельфовой и сухопутной добычи углеводородов.",
         reviews: [
           { author: "Нурлан", rating: 5, date: "28.08.2026", text: "Прямые контракты на практику с ТШО, NCOC и КазМунайГаз." }
@@ -491,6 +511,7 @@
         rating: 4.3,
         programsCount: 40,
         image: "images/dulaty.jpg",
+        fallback: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&auto=format&fit=crop&q=80",
         description: "Многопрофильный университет, объединяющий водное хозяйство, гидромелиорацию и строительство.",
         reviews: [
           { author: "Мерей", rating: 4, date: "05.08.2026", text: "Уникальные специалисты по водному хозяйству готовятся именно здесь." }
@@ -507,6 +528,7 @@
         rating: 4.4,
         programsCount: 35,
         image: "images/kru.jpg",
+        fallback: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&auto=format&fit=crop&q=80",
         description: "Академический центр Северного Казахстана: точное земледелие, селекция, машиностроение и IT.",
         reviews: [
           { author: "Елена", rating: 5, date: "11.08.2026", text: "Очень мощная школа агрономии и ветеринарии." }
@@ -523,6 +545,7 @@
         rating: 4.5,
         programsCount: 34,
         image: "images/kozybayev.jpg",
+        fallback: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&auto=format&fit=crop&q=80",
         description: "Региональный вуз с международной двудипломной программой с University of Arizona (США).",
         reviews: [
           { author: "Руслан", rating: 5, date: "25.08.2026", text: "Программа Arizona дает американские кредиты и передовые знания." }
@@ -533,6 +556,7 @@
     let currentModalUniId = null;
 
     function getStoredUnis() {
+      // Обновляем хранилище, если база изменилась или дополнилась
       const stored = localStorage.getItem('uniguide_unis_data');
       if (stored) {
         try {
@@ -583,14 +607,18 @@
 
       container.innerHTML = filtered.map(uni => {
         const isFav = favs.includes(uni.id);
+        const safeFallback = uni.fallback || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&auto=format&fit=crop&q=80';
         return `
-          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col">
-            <div class="relative h-44 bg-slate-100">
-              <img src="${uni.image}" alt="${uni.name}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80'">
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col group">
+            <div class="relative h-48 bg-slate-100 overflow-hidden">
+              <img src="${uni.image}" 
+                   alt="${uni.name}" 
+                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                   onerror="this.onerror=null; this.src='${safeFallback}'">
               <button onclick="toggleFavorite('${uni.id}')" class="absolute top-3 right-3 p-2 rounded-full ${isFav ? 'bg-rose-50 text-rose-500' : 'bg-white/90 text-slate-500'} hover:scale-110 transition shadow">
                 <i data-lucide="heart" class="w-4 h-4 ${isFav ? 'fill-rose-500' : ''}"></i>
               </button>
-              <div class="absolute bottom-3 left-3 bg-slate-900/80 px-2.5 py-1 rounded text-[11px] font-medium text-white">${uni.city}</div>
+              <div class="absolute bottom-3 left-3 bg-slate-900/80 px-2.5 py-1 rounded text-[11px] font-medium text-white backdrop-blur-sm">${uni.city}</div>
             </div>
             <div class="p-5 flex-1 flex flex-col">
               <div class="flex items-start justify-between gap-2">
@@ -636,9 +664,12 @@
       document.getElementById('modalCost').textContent = uni.cost;
       document.getElementById('modalGrant').textContent = uni.grant;
       document.getElementById('modalPrograms').textContent = uni.programsCount;
-      document.getElementById('modalImg').src = uni.image;
-      document.getElementById('modalImg').onerror = function() {
-        this.src = 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80';
+      
+      const modalImg = document.getElementById('modalImg');
+      modalImg.src = uni.image;
+      modalImg.onerror = function() {
+        this.onerror = null;
+        this.src = uni.fallback || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&auto=format&fit=crop&q=80';
       };
 
       renderReviews(uni.reviews || []);
@@ -736,6 +767,8 @@
     document.getElementById('sortFilter').addEventListener('change', renderCards);
 
     document.addEventListener('DOMContentLoaded', () => {
+      // Всегда перезагружаем актуальную базу данных с фото
+      localStorage.setItem('uniguide_unis_data', JSON.stringify(allKazakhstanUnis));
       renderCards();
       updateFavBadge();
       lucide.createIcons();

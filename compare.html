@@ -33,32 +33,127 @@
         <a href="compare.html" class="text-brand-600 font-semibold transition">Сравнение & Инструменты</a>
       </nav>
       <div class="flex items-center gap-3">
-        <a href="universities.html" class="text-xs bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-xl font-semibold text-slate-700 transition">
-          + Добавить вуз
+        <a href="universities.html" class="text-xs bg-brand-50 hover:bg-brand-100 text-brand-700 px-3.5 py-2 rounded-xl font-semibold transition flex items-center gap-1.5">
+          <i data-lucide="plus" class="w-3.5 h-3.5"></i> Добавить вуз
         </a>
       </div>
     </div>
   </header>
 
   <!-- Вкладки инструментов -->
-  <div class="bg-white border-b border-slate-200">
+  <div class="bg-white border-b border-slate-200 sticky top-20 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex overflow-x-auto gap-8 text-sm font-semibold">
-      <button onclick="switchTab('tabCompare')" id="btn-tabCompare" class="py-4 border-b-2 border-brand-600 text-brand-600 transition whitespace-nowrap">Сравнение (2-3 вуза)</button>
-      <button onclick="switchTab('tabCalc')" id="btn-tabCalc" class="py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition whitespace-nowrap">Калькулятор ЕНТ</button>
-      <button onclick="switchTab('tabQuiz')" id="btn-tabQuiz" class="py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition whitespace-nowrap">Тест профориентации</button>
-      <button onclick="switchTab('tabFavs')" id="btn-tabFavs" class="py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition whitespace-nowrap">Избранное</button>
-      <button onclick="switchTab('tabAdmin')" id="btn-tabAdmin" class="py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition whitespace-nowrap">Управление / Демо-админ</button>
+      <button onclick="switchTab('tabQuiz')" id="btn-tabQuiz" class="py-4 border-b-2 border-brand-600 text-brand-600 transition whitespace-nowrap flex items-center gap-2">
+        <i data-lucide="compass" class="w-4 h-4"></i> Тест профориентации
+      </button>
+      <button onclick="switchTab('tabCalc')" id="btn-tabCalc" class="py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition whitespace-nowrap flex items-center gap-2">
+        <i data-lucide="calculator" class="w-4 h-4"></i> Калькулятор ЕНТ
+      </button>
+      <button onclick="switchTab('tabCompare')" id="btn-tabCompare" class="py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition whitespace-nowrap flex items-center gap-2">
+        <i data-lucide="scale" class="w-4 h-4"></i> Сравнение (2-3 вуза)
+      </button>
+      <button onclick="switchTab('tabFavs')" id="btn-tabFavs" class="py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition whitespace-nowrap flex items-center gap-2">
+        <i data-lucide="heart" class="w-4 h-4"></i> Избранное
+      </button>
+      <button onclick="switchTab('tabAdmin')" id="btn-tabAdmin" class="py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition whitespace-nowrap flex items-center gap-2">
+        <i data-lucide="settings" class="w-4 h-4"></i> Демо-админ
+      </button>
     </div>
   </div>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
 
-    <!-- TAB 1: СРАВНЕНИЕ -->
-    <section id="tabCompare" class="tab-pane">
+    <!-- TAB: ПРОФОРИЕНТАЦИОННЫЙ ТЕСТ -->
+    <section id="tabQuiz" class="tab-pane max-w-3xl mx-auto">
+      <div class="bg-white p-6 sm:p-10 rounded-2xl border border-slate-200 shadow-sm" id="quizBox">
+        <div class="flex items-center justify-between pb-6 border-b border-slate-100 mb-6">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md">Smart Guidance</span>
+            <h2 class="text-2xl font-bold text-slate-900 mt-2">Комплексный тест на выбор будущей профессии</h2>
+            <p class="text-xs text-slate-500 mt-1">Определите предрасположенность и получите персональный список университетов Казахстана</p>
+          </div>
+          <div class="text-right">
+            <span id="quizStepBadge" class="text-xs font-semibold text-slate-400">Вопрос 1 из 6</span>
+          </div>
+        </div>
+
+        <div id="quizContent"></div>
+      </div>
+    </section>
+
+    <!-- TAB: КАЛЬКУЛЯТОР ПОСТУПЛЕНИЯ -->
+    <section id="tabCalc" class="tab-pane hidden max-w-3xl mx-auto">
+      <div class="bg-white p-6 sm:p-10 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="mb-6">
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md">ЕНТ Калькулятор</span>
+          <h2 class="text-2xl font-bold text-slate-900 mt-2">Калькулятор шансов на государственный грант</h2>
+          <p class="text-xs text-slate-500 mt-1">Проверьте проходные баллы на основе анализа открытых конкурсов грантов МНВО РК</p>
+        </div>
+
+        <form id="calcForm" onsubmit="calculateChances(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Ваш балл ЕНТ (макс. 140)</label>
+              <input type="number" id="entScore" min="50" max="140" required placeholder="Например: 108" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-600 outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Профильная комбинация предметов</label>
+              <select id="calcCombo" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white outline-none">
+                <option value="math_inf">Математика + Информатика</option>
+                <option value="math_phys">Математика + Физика</option>
+                <option value="bio_chem">Биология + Химия</option>
+                <option value="world_chop">Всемирная история + ЧОП</option>
+                <option value="geo_math">География + Математика</option>
+                <option value="lang_lit">Казахский/Русский язык + Литература</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Сфера интереса</label>
+              <select id="calcMajor" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white outline-none">
+                <option value="it">Информационные технологии & Software Engineering</option>
+                <option value="eng">Инженерия, металлургия и энергетика</option>
+                <option value="oil">Нефтегазовое дело и добыча</option>
+                <option value="med">Общая медицина, педиатрия и фармация</option>
+                <option value="law">Юриспруденция и международное право</option>
+                <option value="biz">Экономика, маркетинг и финансы</option>
+                <option value="ped">Педагогика и учительские специальности</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Желаемый город обучения</label>
+              <select id="calcCity" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white outline-none">
+                <option value="any">Все города Казахстана</option>
+                <option value="Астана">Астана</option>
+                <option value="Алматы">Алматы</option>
+                <option value="Шымкент">Шымкент</option>
+                <option value="Караганда">Караганда</option>
+                <option value="Актобе">Актобе</option>
+                <option value="Павлодар">Павлодар</option>
+                <option value="Усть-Каменогорск">Усть-Каменогорск</option>
+                <option value="Атырау">Атырау</option>
+                <option value="Костанай">Костанай</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition shadow-lg shadow-brand-600/20">
+            Рассчитать шансы и подобрать вузы
+          </button>
+        </form>
+
+        <div id="calcResult" class="mt-6 p-6 rounded-2xl bg-slate-50 border border-slate-200 hidden"></div>
+      </div>
+    </section>
+
+    <!-- TAB: СРАВНЕНИЕ -->
+    <section id="tabCompare" class="tab-pane hidden">
       <div class="flex items-center justify-between mb-6">
         <div>
-          <h2 class="text-2xl font-bold text-slate-900">Сравнительный анализ</h2>
-          <p class="text-xs text-slate-500 mt-1">Объективное сопоставление выбранных университетов (до 3 вузов)</p>
+          <h2 class="text-2xl font-bold text-slate-900">Сравнительный анализ вузов</h2>
+          <p class="text-xs text-slate-500 mt-1">Параметрическое сопоставление выбранных университетов (до 3 вузов)</p>
         </div>
         <button onclick="clearCompare()" class="text-xs font-semibold text-rose-600 hover:text-rose-700 flex items-center gap-1">
           <i data-lucide="trash-2" class="w-4 h-4"></i> Очистить список
@@ -68,72 +163,20 @@
       <div class="overflow-x-auto bg-white rounded-2xl border border-slate-200 shadow-sm" id="compareContainer"></div>
     </section>
 
-    <!-- TAB 2: КАЛЬКУЛЯТОР ПОСТУПЛЕНИЯ -->
-    <section id="tabCalc" class="tab-pane hidden max-w-2xl mx-auto">
-      <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-        <h2 class="text-2xl font-bold text-slate-900 mb-2">Калькулятор шансов поступления</h2>
-        <p class="text-xs text-slate-500 mb-6 leading-relaxed">Введите ваши прогнозируемые баллы ЕНТ и предпочтительный город, чтобы получить рекомендацию.</p>
-
-        <form id="calcForm" onsubmit="calculateChances(event)" class="space-y-4">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Ваш балл ЕНТ (макс. 140)</label>
-            <input type="number" id="entScore" min="50" max="140" required placeholder="Например: 112" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-600">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Направление</label>
-            <select id="calcMajor" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
-              <option value="it">Информационные технологии & CS</option>
-              <option value="law">Юриспруденция и право</option>
-              <option value="biz">Экономика, финансы и менеджмент</option>
-              <option value="eng">Инженерия и промышленность</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Желаемый город</label>
-            <select id="calcCity" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
-              <option value="any">Любой город РК</option>
-              <option value="Астана">Астана</option>
-              <option value="Алматы">Алматы</option>
-              <option value="Шымкент">Шымкент</option>
-              <option value="Караганда">Караганда</option>
-            </select>
-          </div>
-          <button type="submit" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition">
-            Рассчитать шансы
-          </button>
-        </form>
-
-        <div id="calcResult" class="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200 hidden"></div>
-
-        <p class="text-[11px] text-slate-400 mt-4 leading-relaxed">
-          * Внимание: Результат носит ознакомительный характер на основе демонстрационных проходных баллов прошлых лет. Актуальные условия уточняйте в приемных комиссиях.
-        </p>
-      </div>
-    </section>
-
-    <!-- TAB 3: ПРОФОРИЕНТАЦИОННЫЙ ТЕСТ -->
-    <section id="tabQuiz" class="tab-pane hidden max-w-2xl mx-auto">
-      <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm" id="quizBox">
-        <h2 class="text-2xl font-bold text-slate-900 mb-2">Экспресс-тест на профориентацию</h2>
-        <p class="text-xs text-slate-500 mb-6">Ответьте на вопросы, чтобы определить подходящую сферу для обучения в Казахстане.</p>
-        <div id="quizContent"></div>
-      </div>
-    </section>
-
-    <!-- TAB 4: ИЗБРАННОЕ -->
+    <!-- TAB: ИЗБРАННОЕ -->
     <section id="tabFavs" class="tab-pane hidden">
       <h2 class="text-2xl font-bold text-slate-900 mb-6">Сохраненные университеты</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="favsContainer"></div>
     </section>
 
-    <!-- TAB 5: ДЕМО-АДМИНКА -->
+    <!-- TAB: ДЕМО-АДМИНКА -->
     <section id="tabAdmin" class="tab-pane hidden">
       <div class="flex items-center justify-between mb-6">
         <div>
           <h2 class="text-2xl font-bold text-slate-900">Панель управления университетами</h2>
-          <p class="text-xs text-slate-500 mt-1">Управление базой вузов Казахстана</p>
+          <p class="text-xs text-slate-500 mt-1">Управление аналитической базой данных UniGuide KZ</p>
         </div>
-        <button onclick="resetDb()" class="text-xs bg-slate-200 hover:bg-slate-300 px-3 py-2 rounded-lg text-slate-800 font-semibold">
+        <button onclick="resetDb()" class="text-xs bg-slate-200 hover:bg-slate-300 px-3.5 py-2 rounded-xl text-slate-800 font-semibold transition">
           Восстановить полную базу Казахстана
         </button>
       </div>
@@ -156,6 +199,125 @@
   </main>
 
   <script>
+    // Маппинг сфер на конкретные университеты Казахстана
+    const domainMeta = {
+      it: {
+        title: "IT, Программирование & Искусственный Интеллект",
+        ent: "Математика + Информатика",
+        description: "Разработка ПО, Data Science, кибербезопасность и машинное обучение.",
+        uniIds: ["aitu", "nu", "kbtu", "sdu", "satbayev", "enu"]
+      },
+      engineering: {
+        title: "Инженерия, Металлургия & Энергетика",
+        ent: "Математика + Физика",
+        description: "Робототехника, промышленная автоматизация, цветная металлургия и машиностроение.",
+        uniIds: ["satbayev", "kargu-tech", "vktu", "toraighyrov", "nu"]
+      },
+      oilgas: {
+        title: "Нефтегазовое дело & Геология",
+        ent: "Математика + Физика",
+        description: "Разработка шельфовых и континентальных месторождений, транспортировка нефти и газа.",
+        uniIds: ["aogu", "kbtu", "satbayev"]
+      },
+      medicine: {
+        title: "Медицина, Педиатрия & Фармация",
+        ent: "Биология + Химия",
+        description: "Клиническая медицина, хирургия, общественное здоровье и фармацевтические разработки.",
+        uniIds: ["asfendiyarov", "amu", "kaznu"]
+      },
+      law: {
+        title: "Юриспруденция, Право & Дипломатия",
+        ent: "Всемирная история + ЧОП",
+        description: "Корпоративное право, судебная экспертиза, дипломатическая служба и защита прав человека.",
+        uniIds: ["mnu", "kaznu", "buketov", "enu"]
+      },
+      business: {
+        title: "Бизнес, Финансы & Международная Экономика",
+        ent: "География + Математика",
+        description: "Инвестиционный банкинг, финтех, аналитика больших данных и управление проектами.",
+        uniIds: ["kimep", "narxoz", "mnu", "kaznu"]
+      },
+      agro: {
+        title: "Биотехнологии & Агроинженерия",
+        ent: "Биология + Химия",
+        description: "Генетика, селекция, точное земледелие и продовольственная безопасность.",
+        uniIds: ["ksu", "shakarim", "dulaty"]
+      }
+    };
+
+    // 6 глубоких вопросов теста
+    const quizQuestions = [
+      {
+        q: "Какая задача на практике вызывает у вас наибольший интерес?",
+        options: [
+          { text: "Создать алгоритм рекомендаций или веб-сервис на коде", domain: "it" },
+          { text: "Сконструировать роботизированный механизм или двигатель", domain: "engineering" },
+          { text: "Изучить биохимические механизмы и способы лечения болезней", domain: "medicine" },
+          { text: "Разобрать конфликт сторон по букве закона и защитить клиента", domain: "law" },
+          { text: "Оценить прибыльность стартапа и составить финансовую модель", domain: "business" },
+          { text: "Оптимизировать добычу углеводородов или исследовать пласты", domain: "oilgas" }
+        ]
+      },
+      {
+        q: "С какими данными и инструментами вы предпочитаете работать?",
+        options: [
+          { text: "Среда разработки, базы данных, терминал и скрипты", domain: "it" },
+          { text: "Чертежи, CAD-моделирование, станки и физические приборы", domain: "engineering" },
+          { text: "Микроскопы, клинические анализы, анатомические атласы", domain: "medicine" },
+          { text: "Законодательные кодексы, международные конвенции, договоры", domain: "law" },
+          { text: "Дашборды, биржевые графики, отчеты P&L и балансы", domain: "business" },
+          { text: "Агрономические карты, датчики влажности почвы, биореакторы", domain: "agro" }
+        ]
+      },
+      {
+        q: "В какой рабочей обстановке вы чувствуете себя наиболее продуктивно?",
+        options: [
+          { text: "В гибком гибридном формате / удаленно с технологической командой", domain: "it" },
+          { text: "На промышленном высокотехнологичном предприятии или в лаборатории", domain: "engineering" },
+          { text: "В операционном блоке, диагностическом центре или больнице", domain: "medicine" },
+          { text: "В залах судебных заседаний, переговорных и юридических палатах", domain: "law" },
+          { text: "В современном корпоративном офисе с презентациями инвесторам", domain: "business" },
+          { text: "На морской платформе или полевых геологических станциях", domain: "oilgas" }
+        ]
+      },
+      {
+        q: "Какой школьный предмет вам давался легче и интереснее всего?",
+        options: [
+          { text: "Информатика и алгоритмика", domain: "it" },
+          { text: "Физика и черчение", domain: "engineering" },
+          { text: "Биология и химия", domain: "medicine" },
+          { text: "Всемирная история и основы права (ЧОП)", domain: "law" },
+          { text: "Математика и экономическая география", domain: "business" },
+          { text: "Естествознание и экология", domain: "agro" }
+        ]
+      },
+      {
+        q: "Какой глобальный вызов Казахстана вам хотелось бы решить?",
+        options: [
+          { text: "Создать национальные суверенные AI-модели и GovTech-сервисы", domain: "it" },
+          { text: "Модернизировать энергетическую сеть и построить экологичные заводы", domain: "engineering" },
+          { text: "Повысить продолжительность жизни и внедрить персонализированную медицину", domain: "medicine" },
+          { text: "Укрепить институты правосудия и защиту частной собственности", domain: "law" },
+          { text: "Вывести казахстанские финтех-компании на глобальные биржи", domain: "business" },
+          { text: "Преодолеть дефицит водных ресурсов и развить умное сельское хозяйство", domain: "agro" }
+        ]
+      },
+      {
+        q: "Кем вы видите себя через 5 лет после окончания университета?",
+        options: [
+          { text: "Senior Software Engineer / AI Architect", domain: "it" },
+          { text: "Главный инженер проекта / Промышленный конструктор", domain: "engineering" },
+          { text: "Врач узкого профиля / Научный исследователь биомедицины", domain: "medicine" },
+          { text: "Партнер юридической фирмы / Эксперт международного арбитража", domain: "law" },
+          { text: "Финансовый директор / Основатель венчурного бизнеса", domain: "business" },
+          { text: "Руководитель инженерного департамента нефтегазового оператора", domain: "oilgas" }
+        ]
+      }
+    ];
+
+    let currentQ = 0;
+    let scores = {};
+
     function switchTab(tabId) {
       document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
       document.getElementById(tabId).classList.remove('hidden');
@@ -182,6 +344,172 @@
       return JSON.parse(localStorage.getItem('uniguide_unis_data') || '[]');
     }
 
+    // --- ЛОГИКА ТЕСТА ПРОФОРИЕНТАЦИИ ---
+    function initQuiz() {
+      currentQ = 0;
+      scores = { it: 0, engineering: 0, medicine: 0, law: 0, business: 0, oilgas: 0, agro: 0 };
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const box = document.getElementById('quizContent');
+      document.getElementById('quizStepBadge').textContent = `Вопрос ${currentQ + 1} из ${quizQuestions.length}`;
+
+      if (currentQ < quizQuestions.length) {
+        const item = quizQuestions[currentQ];
+        box.innerHTML = `
+          <div class="mb-6">
+            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mb-6">
+              <div class="bg-brand-600 h-full transition-all duration-300" style="width: ${(currentQ / quizQuestions.length) * 100}%"></div>
+            </div>
+            <h3 class="font-bold text-base sm:text-lg text-slate-900">${item.q}</h3>
+          </div>
+          <div class="space-y-3">
+            ${item.options.map(opt => `
+              <button onclick="handleAnswer('${opt.domain}')" class="w-full text-left p-4 rounded-xl border border-slate-200 hover:border-brand-600 hover:bg-brand-50/50 text-xs sm:text-sm font-medium text-slate-700 transition flex items-center justify-between group">
+                <span>${opt.text}</span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:text-brand-600 transition"></i>
+              </button>
+            `).join('')}
+          </div>
+        `;
+        lucide.createIcons();
+      } else {
+        renderQuizResult();
+      }
+    }
+
+    function handleAnswer(domain) {
+      scores[domain] = (scores[domain] || 0) + 1;
+      currentQ++;
+      showQuestion();
+    }
+
+    function renderQuizResult() {
+      // Находим сферу с максимальным числом баллов
+      let topDomain = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+      const meta = domainMeta[topDomain] || domainMeta['it'];
+      const allUnis = getUnis();
+      const recommendedUnis = allUnis.filter(u => meta.uniIds.includes(u.id));
+
+      const box = document.getElementById('quizContent');
+      document.getElementById('quizStepBadge').textContent = 'Тестирование завершено';
+
+      box.innerHTML = `
+        <div class="space-y-6">
+          <div class="p-6 bg-gradient-to-br from-brand-50 to-indigo-50/30 rounded-2xl border border-brand-100">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-brand-600 text-white mb-3">
+              <i data-lucide="award" class="w-3.5 h-3.5"></i> Ваша идеальная траектория
+            </span>
+            <h3 class="text-xl sm:text-2xl font-black text-slate-900">${meta.title}</h3>
+            <p class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">${meta.description}</p>
+            
+            <div class="mt-4 pt-4 border-t border-brand-100 flex flex-wrap items-center gap-4 text-xs font-semibold text-brand-800">
+              <div class="flex items-center gap-1.5">
+                <i data-lucide="book-open" class="w-4 h-4 text-brand-600"></i> Предметы ЕНТ: <span class="text-slate-900">${meta.ent}</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="font-bold text-sm text-slate-900 mb-3 flex items-center justify-between">
+              <span>Рекомендуемые университеты Казахстана (${recommendedUnis.length})</span>
+              <a href="universities.html" class="text-xs text-brand-600 hover:underline font-normal">Смотреть все вузы →</a>
+            </h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              ${recommendedUnis.map(u => `
+                <div class="p-3.5 bg-slate-50 hover:bg-white rounded-xl border border-slate-200 transition shadow-sm flex items-center justify-between">
+                  <div>
+                    <h5 class="font-bold text-xs text-slate-900">${u.name}</h5>
+                    <p class="text-[11px] text-slate-500">${u.city} • Рейтинг: ★ ${u.rating}</p>
+                  </div>
+                  <a href="universities.html?id=${u.id}" class="text-xs font-semibold text-brand-600 hover:text-brand-700 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200">
+                    Инфо
+                  </a>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="pt-4 flex gap-3">
+            <button onclick="initQuiz()" class="flex-1 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition">
+              Пройти заново
+            </button>
+            <button onclick="switchTab('tabCalc')" class="flex-1 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold transition">
+              Рассчитать грант по баллам ЕНТ
+            </button>
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    // --- ЛОГИКА КАЛЬКУЛЯТОРА ЕНТ ---
+    function calculateChances(e) {
+      e.preventDefault();
+      const score = parseInt(document.getElementById('entScore').value);
+      const major = document.getElementById('calcMajor').value;
+      const city = document.getElementById('calcCity').value;
+      const resBox = document.getElementById('calcResult');
+
+      const allUnis = getUnis();
+
+      // Фильтрация подходящих университетов
+      let candidateUnis = allUnis.filter(u => {
+        if (city !== 'any' && u.city !== city) return false;
+        return true;
+      });
+
+      let status = "";
+      let colorClass = "";
+      let advice = "";
+
+      if (score >= 125) {
+        status = "Гарантированный государственный грант / Внутренний грант топ-вузов";
+        colorClass = "bg-emerald-50 border-emerald-200 text-emerald-900";
+        advice = "С вашим баллом открыты двери во все национальные и исследовательские университеты РК (Nazarbayev University, КБТУ, КазНУ, ЕНУ, KIMEP).";
+      } else if (score >= 95) {
+        status = "Высокие шансы на государственный грант";
+        colorClass = "bg-brand-50 border-brand-200 text-brand-900";
+        advice = "Вы уверенно проходите по конкурсу грантов на большинство технических, педагогических и региональных программ.";
+      } else if (score >= 70) {
+        status = "Конкурс на региональные и целевые гранты / Скидки ректора";
+        colorClass = "bg-amber-50 border-amber-200 text-amber-900";
+        advice = "Рекомендуется подавать на региональные квоты (Серпін), а также участвовать во внутренних предметных олимпиадах вузов.";
+      } else {
+        status = "Платное отделение";
+        colorClass = "bg-slate-100 border-slate-200 text-slate-800";
+        advice = "Минимальный пороговый балл для платного отделения преодолен. Уточняйте возможность внутренней рассрочки в приемной комиссии.";
+      }
+
+      const displayList = candidateUnis.slice(0, 4);
+
+      resBox.className = `mt-6 p-6 rounded-2xl border ${colorClass}`;
+      resBox.innerHTML = `
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider opacity-75">Результат расчета (${score} баллов ЕНТ)</span>
+            <h4 class="text-base sm:text-lg font-black mt-0.5">${status}</h4>
+            <p class="text-xs mt-2 leading-relaxed opacity-90">${advice}</p>
+          </div>
+        </div>
+
+        <div class="mt-5 pt-4 border-t border-black/10">
+          <p class="text-xs font-bold uppercase tracking-wider mb-2">Подходящие университеты по заданным параметрам:</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            ${displayList.map(u => `
+              <div class="p-2.5 bg-white/80 rounded-xl text-xs flex items-center justify-between border border-black/5">
+                <span class="font-bold truncate mr-2">${u.name}</span>
+                <span class="font-semibold text-slate-500 whitespace-nowrap">${u.city}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      resBox.classList.remove('hidden');
+    }
+
+    // --- ЛОГИКА СРАВНЕНИЯ ---
     function renderCompare() {
       const compareIds = JSON.parse(localStorage.getItem('uniguide_compare') || '[]');
       const allUnis = getUnis();
@@ -208,7 +536,7 @@
               <th class="p-4 w-44 font-bold text-slate-500 uppercase tracking-wider">Параметр</th>
               ${unis.map(u => `
                 <th class="p-4 font-bold text-slate-900 border-l border-slate-200">
-                  <div class="flex items-center justify-between">
+                  <div class="flex items-center justify-between gap-2">
                     <span>${u.name}</span>
                     <button onclick="removeFromCompare('${u.id}')" class="text-slate-400 hover:text-rose-500"><i data-lucide="x" class="w-4 h-4"></i></button>
                   </div>
@@ -259,100 +587,7 @@
       renderCompare();
     }
 
-    function calculateChances(e) {
-      e.preventDefault();
-      const score = parseInt(document.getElementById('entScore').value);
-      const city = document.getElementById('calcCity').value;
-      const resBox = document.getElementById('calcResult');
-
-      let status = "";
-      let colorClass = "";
-      let recommendations = "";
-
-      if (score >= 120) {
-        status = "Высокая вероятность гранта";
-        colorClass = "text-emerald-700 bg-emerald-50 border-emerald-200";
-        recommendations = "Nazarbayev University, КБТУ, KIMEP, MNU, Satbayev University.";
-      } else if (score >= 90) {
-        status = "Уверенные шансы на государственный грант";
-        colorClass = "text-brand-700 bg-brand-50 border-brand-200";
-        recommendations = "ЕНУ им. Гумилева, SDU, КарУ им. Букетова, ВКТУ им. Серикбаева, АРУ им. Жубанова.";
-      } else {
-        status = "Платное отделение или региональный грант";
-        colorClass = "text-amber-700 bg-amber-50 border-amber-200";
-        recommendations = "Региональные университеты (ЮКУ, ТоУ, ТарРУ, КРУ), внутренние гранты ректора.";
-      }
-
-      resBox.className = `mt-6 p-4 rounded-xl border ${colorClass}`;
-      resBox.innerHTML = `
-        <div class="font-bold text-sm mb-1">${status} (${score} баллов)</div>
-        <p class="text-xs leading-relaxed">Рекомендуемые варианты (${city === 'any' ? 'все города' : city}): <strong>${recommendations}</strong></p>
-      `;
-      resBox.classList.remove('hidden');
-    }
-
-    const quizQuestions = [
-      {
-        q: "1. Какая сфера деятельности привлекает вас больше всего?",
-        options: [
-          { text: "Создавать программы, приложения и алгоритмы искусственного интеллекта", track: "IT & Разработка" },
-          { text: "Защищать права граждан, разбирать судебные дела и договоры", track: "Юриспруденция" },
-          { text: "Инвестиции, аналитика рынка, стартапы и управление финансами", track: "Финансы и Бизнес" }
-        ]
-      },
-      {
-        q: "2. Какой формат будущей работы для вас идеален?",
-        options: [
-          { text: "Удаленно за мощным компьютером в любой точке мира", track: "IT & Разработка" },
-          { text: "Судебные процессы, переговоры и консультирование в офисе", track: "Юриспруденция" },
-          { text: "Аналитические отчеты, аудит и презентации для инвесторов", track: "Финансы и Бизнес" }
-        ]
-      }
-    ];
-
-    let currentQ = 0;
-    let selectedTracks = [];
-
-    function initQuiz() {
-      currentQ = 0;
-      selectedTracks = [];
-      showQuestion();
-    }
-
-    function showQuestion() {
-      const box = document.getElementById('quizContent');
-      if (currentQ < quizQuestions.length) {
-        const item = quizQuestions[currentQ];
-        box.innerHTML = `
-          <h3 class="font-bold text-sm text-slate-800 mb-4">${item.q}</h3>
-          <div class="space-y-3">
-            ${item.options.map((opt, i) => `
-              <button onclick="answerQuiz('${opt.track}')" class="w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-brand-600 hover:bg-brand-50/50 text-xs font-medium text-slate-700 transition">
-                ${opt.text}
-              </button>
-            `).join('')}
-          </div>
-        `;
-      } else {
-        const resultTrack = selectedTracks[0] || "Современные междисциплинарные программы";
-        box.innerHTML = `
-          <div class="p-6 bg-brand-50 rounded-xl border border-brand-100 text-center">
-            <i data-lucide="award" class="w-10 h-10 text-brand-600 mx-auto mb-2"></i>
-            <h3 class="font-bold text-base text-slate-900">Рекомендуемое направление: ${resultTrack}</h3>
-            <p class="text-xs text-slate-600 mt-2">Результат теста носит ознакомительный характер. Рекомендуем ознакомиться со специальностями в нашем каталоге.</p>
-            <button onclick="initQuiz()" class="mt-4 px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-semibold">Пройти заново</button>
-          </div>
-        `;
-        lucide.createIcons();
-      }
-    }
-
-    function answerQuiz(track) {
-      selectedTracks.push(track);
-      currentQ++;
-      showQuestion();
-    }
-
+    // --- ЛОГИКА ИЗБРАННОГО ---
     function renderFavs() {
       const favIds = JSON.parse(localStorage.getItem('uniguide_favorites') || '[]');
       const allUnis = getUnis();
@@ -368,13 +603,14 @@
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
           <div>
             <h4 class="font-bold text-slate-900 text-sm">${u.name}</h4>
-            <p class="text-xs text-slate-500">${u.city} • ${u.rating} ★</p>
+            <p class="text-xs text-slate-500">${u.city} • ★ ${u.rating}</p>
           </div>
           <a href="universities.html?id=${u.id}" class="text-xs font-semibold text-brand-600 hover:underline">Подробнее</a>
         </div>
       `).join('');
     }
 
+    // --- ДЕМО-АДМИНКА ---
     function renderAdmin() {
       const unis = getUnis();
       const tbody = document.getElementById('adminTableBody');
@@ -406,9 +642,9 @@
     document.addEventListener('DOMContentLoaded', () => {
       const hash = window.location.hash;
       if (hash === '#calculator') switchTab('tabCalc');
-      else if (hash === '#quiz') switchTab('tabQuiz');
+      else if (hash === '#compare') switchTab('tabCompare');
       else if (hash === '#favorites') switchTab('tabFavs');
-      else switchTab('tabCompare');
+      else switchTab('tabQuiz');
     });
   </script>
 </body>

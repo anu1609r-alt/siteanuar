@@ -65,9 +65,7 @@
         </button>
       </div>
 
-      <div class="overflow-x-auto bg-white rounded-2xl border border-slate-200 shadow-sm" id="compareContainer">
-        <!-- Таблица рендерится JS -->
-      </div>
+      <div class="overflow-x-auto bg-white rounded-2xl border border-slate-200 shadow-sm" id="compareContainer"></div>
     </section>
 
     <!-- TAB 2: КАЛЬКУЛЯТОР ПОСТУПЛЕНИЯ -->
@@ -96,6 +94,7 @@
               <option value="any">Любой город РК</option>
               <option value="Астана">Астана</option>
               <option value="Алматы">Алматы</option>
+              <option value="Шымкент">Шымкент</option>
               <option value="Караганда">Караганда</option>
             </select>
           </div>
@@ -104,9 +103,7 @@
           </button>
         </form>
 
-        <div id="calcResult" class="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200 hidden">
-          <!-- Результаты расчета -->
-        </div>
+        <div id="calcResult" class="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200 hidden"></div>
 
         <p class="text-[11px] text-slate-400 mt-4 leading-relaxed">
           * Внимание: Результат носит ознакомительный характер на основе демонстрационных проходных баллов прошлых лет. Актуальные условия уточняйте в приемных комиссиях.
@@ -118,20 +115,15 @@
     <section id="tabQuiz" class="tab-pane hidden max-w-2xl mx-auto">
       <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm" id="quizBox">
         <h2 class="text-2xl font-bold text-slate-900 mb-2">Экспресс-тест на профориентацию</h2>
-        <p class="text-xs text-slate-500 mb-6">Ответьте на 3 вопроса, чтобы определить подходящую сферу для обучения в Казахстане.</p>
-
-        <div id="quizContent">
-          <!-- Вопросы генерируются JS -->
-        </div>
+        <p class="text-xs text-slate-500 mb-6">Ответьте на вопросы, чтобы определить подходящую сферу для обучения в Казахстане.</p>
+        <div id="quizContent"></div>
       </div>
     </section>
 
     <!-- TAB 4: ИЗБРАННОЕ -->
     <section id="tabFavs" class="tab-pane hidden">
       <h2 class="text-2xl font-bold text-slate-900 mb-6">Сохраненные университеты</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="favsContainer">
-        <!-- Избранные вузы -->
-      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="favsContainer"></div>
     </section>
 
     <!-- TAB 5: ДЕМО-АДМИНКА -->
@@ -139,10 +131,10 @@
       <div class="flex items-center justify-between mb-6">
         <div>
           <h2 class="text-2xl font-bold text-slate-900">Панель управления университетами</h2>
-          <p class="text-xs text-slate-500 mt-1">Добавление, редактирование и удаление вузов (демонстрационная база)</p>
+          <p class="text-xs text-slate-500 mt-1">Управление базой вузов Казахстана</p>
         </div>
         <button onclick="resetDb()" class="text-xs bg-slate-200 hover:bg-slate-300 px-3 py-2 rounded-lg text-slate-800 font-semibold">
-          Восстановить стандартную базу
+          Восстановить полную базу Казахстана
         </button>
       </div>
 
@@ -156,9 +148,7 @@
               <th class="p-4 text-right">Действие</th>
             </tr>
           </thead>
-          <tbody id="adminTableBody" class="divide-y divide-slate-100">
-            <!-- Список для удаления/управления -->
-          </tbody>
+          <tbody id="adminTableBody" class="divide-y divide-slate-100"></tbody>
         </table>
       </div>
     </section>
@@ -192,7 +182,6 @@
       return JSON.parse(localStorage.getItem('uniguide_unis_data') || '[]');
     }
 
-    // Рендер таблицы сравнения
     function renderCompare() {
       const compareIds = JSON.parse(localStorage.getItem('uniguide_compare') || '[]');
       const allUnis = getUnis();
@@ -204,7 +193,7 @@
           <div class="p-12 text-center text-slate-500">
             <i data-lucide="scale" class="w-10 h-10 mx-auto text-slate-300 mb-3"></i>
             <p class="font-semibold text-slate-700">Список сравнения пуст</p>
-            <p class="text-xs text-slate-400 mt-1">Перейдите в каталог и добавьте 2 или 3 университета для анализа</p>
+            <p class="text-xs text-slate-400 mt-1">Перейдите в каталог и добавьте от 2 до 3 университетов для анализа</p>
             <a href="universities.html" class="inline-block mt-4 px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-semibold">В каталог</a>
           </div>
         `;
@@ -270,7 +259,6 @@
       renderCompare();
     }
 
-    // Калькулятор ЕНТ
     function calculateChances(e) {
       e.preventDefault();
       const score = parseInt(document.getElementById('entScore').value);
@@ -284,41 +272,40 @@
       if (score >= 120) {
         status = "Высокая вероятность гранта";
         colorClass = "text-emerald-700 bg-emerald-50 border-emerald-200";
-        recommendations = "Nazarbayev University (внутренний конкурс), KIMEP, MNU, Satbayev University.";
+        recommendations = "Nazarbayev University, КБТУ, KIMEP, MNU, Satbayev University.";
       } else if (score >= 90) {
         status = "Уверенные шансы на государственный грант";
         colorClass = "text-brand-700 bg-brand-50 border-brand-200";
-        recommendations = "ЕНУ им. Гумилева, SDU, КарУ им. Букетова, Satbayev University.";
+        recommendations = "ЕНУ им. Гумилева, SDU, КарУ им. Букетова, ВКТУ им. Серикбаева, АРУ им. Жубанова.";
       } else {
         status = "Платное отделение или региональный грант";
         colorClass = "text-amber-700 bg-amber-50 border-amber-200";
-        recommendations = "Региональные университеты, внутренние скидки по результатам собеседования.";
+        recommendations = "Региональные университеты (ЮКУ, ТоУ, ТарРУ, КРУ), внутренние гранты ректора.";
       }
 
       resBox.className = `mt-6 p-4 rounded-xl border ${colorClass}`;
       resBox.innerHTML = `
         <div class="font-bold text-sm mb-1">${status} (${score} баллов)</div>
-        <p class="text-xs leading-relaxed">Рекомендуемые демонстрационные варианты (${city === 'any' ? 'все города' : city}): <strong>${recommendations}</strong></p>
+        <p class="text-xs leading-relaxed">Рекомендуемые варианты (${city === 'any' ? 'все города' : city}): <strong>${recommendations}</strong></p>
       `;
       resBox.classList.remove('hidden');
     }
 
-    // Экспресс-тест
     const quizQuestions = [
       {
         q: "1. Какая сфера деятельности привлекает вас больше всего?",
         options: [
-          { text: "Создавать программы, приложения и алгоритмы", track: "IT & Разработка" },
-          { text: "Защищать права людей и разбирать законы", track: "Юриспруденция" },
-          { text: "Инвестиции, аналитика рынка и построение бизнеса", track: "Финансы и Бизнес" }
+          { text: "Создавать программы, приложения и алгоритмы искусственного интеллекта", track: "IT & Разработка" },
+          { text: "Защищать права граждан, разбирать судебные дела и договоры", track: "Юриспруденция" },
+          { text: "Инвестиции, аналитика рынка, стартапы и управление финансами", track: "Финансы и Бизнес" }
         ]
       },
       {
-        q: "2. Какой формат работы для вас идеален?",
+        q: "2. Какой формат будущей работы для вас идеален?",
         options: [
-          { text: "Удаленно за мощным ноутбуком в любой точке мира", track: "IT & Разработка" },
-          { text: "Судебные процессы, переговоры и составление договоров", track: "Юриспруденция" },
-          { text: "Аналитические отчеты, презентации для инвесторов", track: "Финансы и Бизнес" }
+          { text: "Удаленно за мощным компьютером в любой точке мира", track: "IT & Разработка" },
+          { text: "Судебные процессы, переговоры и консультирование в офисе", track: "Юриспруденция" },
+          { text: "Аналитические отчеты, аудит и презентации для инвесторов", track: "Финансы и Бизнес" }
         ]
       }
     ];
@@ -366,7 +353,6 @@
       showQuestion();
     }
 
-    // Избранное
     function renderFavs() {
       const favIds = JSON.parse(localStorage.getItem('uniguide_favorites') || '[]');
       const allUnis = getUnis();
@@ -389,7 +375,6 @@
       `).join('');
     }
 
-    // Демо-админка
     function renderAdmin() {
       const unis = getUnis();
       const tbody = document.getElementById('adminTableBody');

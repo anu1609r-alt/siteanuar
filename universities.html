@@ -44,22 +44,36 @@
   <!-- Title & Search Bar -->
   <div class="bg-white border-b border-slate-200 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-extrabold text-slate-900">Университеты Казахстана</h1>
-      <p class="text-slate-500 text-sm mt-1">Исследуйте вузы, фильтруйте по городам и читайте честные отзывы студентов</p>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-3xl font-extrabold text-slate-900">Университеты Казахстана</h1>
+          <p class="text-slate-500 text-sm mt-1">Все ведущие вузы регионов Казахстана: сравнивайте условия, читайте отзывы и выбирайте специальность</p>
+        </div>
+        <span id="totalFoundBadge" class="self-start md:self-auto text-xs font-semibold px-3 py-1.5 bg-brand-50 text-brand-700 rounded-lg"></span>
+      </div>
 
       <div class="mt-6 flex flex-col md:flex-row gap-4">
         <div class="relative flex-1">
           <i data-lucide="search" class="w-5 h-5 absolute left-3.5 top-3 text-slate-400"></i>
-          <input type="text" id="searchInput" placeholder="Поиск по названию или описанию..." class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-600/20 focus:border-brand-600 text-sm">
+          <input type="text" id="searchInput" placeholder="Поиск по названию вуза, направлению или городу..." class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-600/20 focus:border-brand-600 text-sm">
         </div>
         <select id="cityFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-600">
-          <option value="all">Все города</option>
+          <option value="all">Все регионы и города</option>
           <option value="Астана">Астана</option>
           <option value="Алматы">Алматы</option>
+          <option value="Шымкент">Шымкент</option>
           <option value="Караганда">Караганда</option>
+          <option value="Актобе">Актобе</option>
+          <option value="Семей">Семей</option>
+          <option value="Павлодар">Павлодар</option>
+          <option value="Усть-Каменогорск">Усть-Каменогорск</option>
+          <option value="Атырау">Атырау</option>
+          <option value="Тараз">Тараз</option>
+          <option value="Костанай">Костанай</option>
+          <option value="Петропавловск">Петропавловск</option>
         </select>
         <select id="sortFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-600">
-          <option value="rating">По рейтингу</option>
+          <option value="rating">По рейтингу (сначала высокий)</option>
           <option value="programs">По числу программ</option>
           <option value="name">По алфавиту</option>
         </select>
@@ -69,9 +83,7 @@
 
   <!-- Main Content Layout -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="unisList">
-      <!-- Динамический список вузов -->
-    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="unisList"></div>
   </main>
 
   <!-- Modal: Детали вуза и Отзывы -->
@@ -82,9 +94,7 @@
         <button onclick="closeModal()" class="absolute top-4 right-4 bg-white/90 p-2 rounded-full hover:bg-white text-slate-700 shadow">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
-        <div class="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-sm px-3.5 py-1.5 rounded-lg text-white font-semibold text-xs" id="modalCityBadge">
-          Город
-        </div>
+        <div class="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-sm px-3.5 py-1.5 rounded-lg text-white font-semibold text-xs" id="modalCityBadge">Город</div>
       </div>
 
       <div class="p-6 sm:p-8 flex-1">
@@ -115,7 +125,7 @@
           </div>
         </div>
 
-        <!-- Секция отзывов -->
+        <!-- Отзывы -->
         <div class="border-t border-slate-200 pt-6 mt-6">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
@@ -124,25 +134,21 @@
             <span class="text-xs text-slate-500" id="reviewsCountBadge">0 отзывов</span>
           </div>
 
-          <!-- Список отзывов -->
-          <div class="space-y-3 mb-6" id="reviewsContainer">
-            <!-- Отзывы генерируются js -->
-          </div>
+          <div class="space-y-3 mb-6" id="reviewsContainer"></div>
 
-          <!-- Форма добавления отзыва -->
           <form id="reviewForm" class="bg-slate-50 p-4 rounded-xl border border-slate-200" onsubmit="handleReviewSubmit(event)">
-            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Оставить свой отзыв</h4>
+            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Оставить отзыв об университете</h4>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
               <input type="text" id="reviewerName" placeholder="Ваше имя / курс" required class="px-3 py-2 rounded-lg border border-slate-200 text-xs w-full">
               <select id="reviewerRating" class="px-3 py-2 rounded-lg border border-slate-200 text-xs w-full bg-white">
                 <option value="5">5 звезд — Отлично</option>
                 <option value="4">4 звезды — Хорошо</option>
                 <option value="3">3 звезды — Нормально</option>
-                <option value="2">2 звезды — Есть проблемы</option>
+                <option value="2">2 звезды — Есть замечания</option>
                 <option value="1">1 звезда — Не рекомендую</option>
               </select>
             </div>
-            <textarea id="reviewerText" rows="3" placeholder="Расскажите об общежитиях, преподавателях, практике и атмосфере..." required class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs mb-3"></textarea>
+            <textarea id="reviewerText" rows="3" placeholder="Расскажите о преподавателях, общежитии, сессии и возможностях..." required class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs mb-3"></textarea>
             <button type="submit" class="w-full py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs transition">
               Опубликовать отзыв
             </button>
@@ -153,10 +159,10 @@
   </div>
 
   <script>
-    const fullUnis = [
+    const allKazakhstanUnis = [
       {
         id: "nu",
-        name: "Nazarbayev University",
+        name: "Nazarbayev University (NU)",
         shortName: "NU",
         city: "Астана",
         type: "Автономный исследовательский",
@@ -165,32 +171,31 @@
         rating: 4.9,
         programsCount: 28,
         image: "images/nu.jpg",
-        description: "Флагман высшего образования Казахстана. Обучение на английском языке, передовые лаборатории и преподаватели со всего мира.",
+        description: "Флагман высшего образования Казахстана. Обучение на английском языке, передовые лаборатории и профессора со всего мира.",
         reviews: [
-          { author: "Алишер (3 курс, CS)", rating: 5, date: "15.09.2026", text: "Академическая нагрузка колоссальная, но возможности трудоустройства в мировые IT-гиганты окупают все бессонные ночи." },
-          { author: "Дана (выпускница)", rating: 5, date: "02.08.2026", text: "Лучший кампус в Центральной Азии. Студенческое самоуправление действительно работает." }
+          { author: "Алишер (CS)", rating: 5, date: "15.09.2026", text: "Высокая академическая планка, карьерные ярмарки с международными IT-компаниями." }
         ]
       },
       {
         id: "mnu",
-        name: "Maqsut Narikbayev University",
+        name: "Maqsut Narikbayev University (KAZGUU)",
         shortName: "MNU",
         city: "Астана",
         type: "Корпоративный",
         cost: "От 1 800 000 ₸ / год",
         grant: "Государственный и ректорский",
         rating: 4.8,
-        programsCount: 22,
+        programsCount: 24,
         image: "images/mnu.jpg",
-        description: "Высочайший уровень подготовки в области юриспруденции, дипломатии и бизнеса с международной аккредитацией FIBAA.",
+        description: "Ведущая юридическая и гуманитарно-экономическая школа страны с международной аккредитацией FIBAA.",
         reviews: [
-          { author: "Ерлан (Юриспруденция)", rating: 5, date: "10.09.2026", text: "Сильнейшая школа судебной практики. Преподают реальные действующие судьи и адвокаты." }
+          { author: "Ерлан (Юрист)", rating: 5, date: "10.09.2026", text: "Сильная практическая подготовка и симуляции судебных процессов." }
         ]
       },
       {
         id: "enu",
-        name: "L.N. Gumilyov ENU",
-        shortName: "ЕНУ им. Гумилева",
+        name: "ЕНУ им. Л.Н. Гумилева",
+        shortName: "ЕНУ",
         city: "Астана",
         type: "Национальный",
         cost: "От 1 100 000 ₸ / год",
@@ -198,15 +203,63 @@
         rating: 4.6,
         programsCount: 65,
         image: "images/enu.jpg",
-        description: "Классический национальный университет в центре столицы с сильной базой точных наук и филологии.",
+        description: "Крупнейший национальный университет столицы с широким спектром естественно-научных и IT специальностей.",
         reviews: [
-          { author: "Айгерим (IT-факультет)", rating: 4, date: "20.08.2026", text: "Большое количество грантов, хорошие преподаватели старой школы, но в общежитиях иногда тесновато." }
+          { author: "Айгерим", rating: 4, date: "20.08.2026", text: "Много грантовых мест, сильные кафедры точных наук." }
+        ]
+      },
+      {
+        id: "aitu",
+        name: "Astana IT University (AITU)",
+        shortName: "AITU",
+        city: "Астана",
+        type: "Специализированный IT",
+        cost: "От 1 600 000 ₸ / год",
+        grant: "Государственный целевой грант",
+        rating: 4.8,
+        programsCount: 14,
+        image: "images/aitu.jpg",
+        description: "Инновационный IT-вуз на территории EXPO: кибербезопасность, Software Engineering, AI и Data Science.",
+        reviews: [
+          { author: "Нурсултан", rating: 5, date: "12.09.2026", text: "Современное оборудование, тесная связь с резидентами Astana Hub." }
+        ]
+      },
+      {
+        id: "amu",
+        name: "Медицинский университет Астана (МУА)",
+        shortName: "МУА",
+        city: "Астана",
+        type: "Медицинский исследовательский",
+        cost: "От 1 400 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.7,
+        programsCount: 16,
+        image: "images/amu.jpg",
+        description: "Главный центр подготовки врачей и фармацевтов столицы с собственной клинической базой.",
+        reviews: [
+          { author: "Динара", rating: 5, date: "02.09.2026", text: "Практика на базе Национального научного центра с ранних курсов." }
+        ]
+      },
+      {
+        id: "kaznu",
+        name: "КазНУ им. аль-Фараби",
+        shortName: "КазНУ",
+        city: "Алматы",
+        type: "Национальный исследовательский",
+        cost: "От 1 300 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.8,
+        programsCount: 85,
+        image: "images/kaznu.jpg",
+        description: "Старейший классический университет страны, лидер в глобальных академических рейтингах QS.",
+        reviews: [
+          { author: "Санжар", rating: 5, date: "14.09.2026", text: "Огромный красивый кампус 'Казгуград' и мощная фундаментальная наука." }
         ]
       },
       {
         id: "satbayev",
-        name: "Satbayev University",
-        shortName: "Политех",
+        name: "Satbayev University (Политех)",
+        shortName: "Satbayev",
         city: "Алматы",
         type: "Национальный исследовательский",
         cost: "От 1 200 000 ₸ / год",
@@ -214,9 +267,9 @@
         rating: 4.7,
         programsCount: 54,
         image: "images/satbayev.jpg",
-        description: "Старейший и авторитетнейший политехнический университет Казахстана: горное дело, робототехника, AI и архитектура.",
+        description: "Ведущий технический университет РК: горное дело, металлургия, машиностроение, архитектура и робототехника.",
         reviews: [
-          { author: "Бахтияр (Инженерия)", rating: 5, date: "05.09.2026", text: "В Алматы для инженеров альтернатив нет. Прямые стажировки в крупных промышленных компаниях." }
+          { author: "Бахтияр", rating: 5, date: "05.09.2026", text: "Прямые производственные стажировки в промышленных компаниях." }
         ]
       },
       {
@@ -230,9 +283,25 @@
         rating: 4.8,
         programsCount: 19,
         image: "images/kimep.jpg",
-        description: "Североамериканская модель образования в самом сердце Алматы. Лидер бизнес-образования, финансов и маркетинга.",
+        description: "Североамериканская модель образования в центре Алматы. Лидер бизнес- и финансового образования.",
         reviews: [
-          { author: "Мадина (Финансы)", rating: 5, date: "11.09.2026", text: "Нетворкинг решает всё. Большинство однокурсников на 4 курсе уже работают в Big 4." }
+          { author: "Мадина", rating: 5, date: "11.09.2026", text: "Мощный карьерный центр, нетворкинг и признание диплома за рубежом." }
+        ]
+      },
+      {
+        id: "kbtu",
+        name: "КБТУ (Казахстанско-Британский технический)",
+        shortName: "КБТУ",
+        city: "Алматы",
+        type: "Научно-исследовательский",
+        cost: "От 2 400 000 ₸ / год",
+        grant: "Государственный грант и фонд КБТУ",
+        rating: 4.9,
+        programsCount: 26,
+        image: "images/kbtu.jpg",
+        description: "Элитная подготовка специалистов в сферах Computer Science, нефтегаза и прикладной математики.",
+        reviews: [
+          { author: "Арман", rating: 5, date: "08.09.2026", text: "Выпускники работают в крупнейших IT-корпорациях мира." }
         ]
       },
       {
@@ -246,48 +315,249 @@
         rating: 4.7,
         programsCount: 30,
         image: "images/sdu.jpg",
-        description: "Известен мощнейшей школой олимпиадного программирования, уютным загородным кампусом и сильной языковой подготовкой.",
+        description: "Сильнейшая школа спортивного программирования, уютный загородный кампус и обучение на английском.",
         reviews: [
-          { author: "Темирлан (Computer Science)", rating: 5, date: "01.09.2026", text: "Атмосфера кампуса в Каскелене неповторимая. Студенческая жизнь бурлит 24/7." }
+          { author: "Темирлан", rating: 5, date: "01.09.2026", text: "Атмосфера кампуса в Каскелене способствует учебе 24/7." }
+        ]
+      },
+      {
+        id: "narxoz",
+        name: "Университет Нархоз",
+        shortName: "Нархоз",
+        city: "Алматы",
+        type: "Частный инновационный",
+        cost: "От 1 700 000 ₸ / год",
+        grant: "Ректорские гранты и гранты РК",
+        rating: 4.6,
+        programsCount: 25,
+        image: "images/narxoz.jpg",
+        description: "Экономический вуз с современным эко-кампусом, аккредитацией QS Stars и британскими двойными дипломами.",
+        reviews: [
+          { author: "Асель", rating: 4, date: "16.08.2026", text: "Очень красивый кампус и развитая система кейс-чемпионатов." }
+        ]
+      },
+      {
+        id: "asfendiyarov",
+        name: "КазНМУ им. С.Д. Асфендиярова",
+        shortName: "КазНМУ",
+        city: "Алматы",
+        type: "Национальный медицинский",
+        cost: "От 1 500 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.7,
+        programsCount: 18,
+        image: "images/asfendiyarov.jpg",
+        description: "Главная кузница врачебных кадров страны с вековой историей и широкой клинической базой.",
+        reviews: [
+          { author: "Камила", rating: 5, date: "24.08.2026", text: "Огромная клиническая практика и строгая врачебная дисциплина." }
         ]
       },
       {
         id: "buketov",
-        name: "Karaganda Buketov University",
+        name: "КарУ им. академика Е.А. Букетова",
         shortName: "КарУ им. Букетова",
         city: "Караганда",
-        type: "Классический региональный",
+        type: "Классический исследовательский",
         cost: "От 850 000 ₸ / год",
         grant: "Государственный грант РК",
         rating: 4.5,
-        programsCount: 50,
+        programsCount: 52,
         image: "images/buketov.jpg",
-        description: "Крупнейший научно-образовательный центр Центрального Казахстана с сильными традициями фундаментальных наук.",
+        description: "Многопрофильный научно-образовательный центр Центрального Казахстана: сильная педагогика и право.",
         reviews: [
-          { author: "Светлана (Педагогика)", rating: 4, date: "18.07.2026", text: "Доступная стоимость, отличные методисты и очень сильная практика в школах региона." }
+          { author: "Светлана", rating: 4, date: "18.07.2026", text: "Доступная цена обучения и качественная методическая подготовка." }
+        ]
+      },
+      {
+        id: "kargu-tech",
+        name: "КарТУ им. Абылкаса Сагинова (Политех)",
+        shortName: "КарТУ",
+        city: "Караганда",
+        type: "Технический исследовательский",
+        cost: "От 900 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.6,
+        programsCount: 40,
+        image: "images/kartu.jpg",
+        description: "Ведущий инженерный вуз по подготовке кадров для горнодобывающей и металлургической отрасли.",
+        reviews: [
+          { author: "Дмитрий", rating: 5, date: "09.09.2026", text: "Высокий спрос на выпускников на заводах и горнорудных комбинатах." }
+        ]
+      },
+      {
+        id: "auezov",
+        name: "ЮКУ им. М. Ауэзова",
+        shortName: "ЮКУ им. Ауэзова",
+        city: "Шымкент",
+        type: "Региональный многопрофильный",
+        cost: "От 800 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.5,
+        programsCount: 60,
+        image: "images/auezov.jpg",
+        description: "Крупнейший университет южного Казахстана, обучающий свыше 20 тысяч студентов по десяткам направлений.",
+        reviews: [
+          { author: "Бауыржан", rating: 4, date: "22.08.2026", text: "Крупнейшая лабораторная база нефтехимии и материаловедения на юге." }
+        ]
+      },
+      {
+        id: "zhubanov",
+        name: "АРУ им. К. Жубанова",
+        shortName: "АРУ им. Жубанова",
+        city: "Актобе",
+        type: "Региональный многопрофильный",
+        cost: "От 750 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.4,
+        programsCount: 45,
+        image: "images/zhubanov.jpg",
+        description: "Главный академический центр Западного Казахстана: филология, естествознание, IT и экономика.",
+        reviews: [
+          { author: "Азамат", rating: 4, date: "15.08.2026", text: "Развитые программы академической мобильности и обмена Erasmus+." }
+        ]
+      },
+      {
+        id: "shakarim",
+        name: "Университет имени Шакарима",
+        shortName: "Shakarim University",
+        city: "Семей",
+        type: "Классический многопрофильный",
+        cost: "От 700 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.4,
+        programsCount: 38,
+        image: "images/shakarim.jpg",
+        description: "Научный оплот области Абай с упором на биотехнологии, аграрные и гуманитарные науки.",
+        reviews: [
+          { author: "Арай", rating: 4, date: "10.07.2026", text: "Сильная лабораторная база по биотехнологиям." }
+        ]
+      },
+      {
+        id: "toraighyrov",
+        name: "Торайгыров Университет (ТоУ)",
+        shortName: "ТоУ",
+        city: "Павлодар",
+        type: "Инженерно-технологический",
+        cost: "От 800 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.5,
+        programsCount: 42,
+        image: "images/tou.jpg",
+        description: "Региональный центр инженерной подготовки для энергетики, нефтехимии и металлургии.",
+        reviews: [
+          { author: "Максим", rating: 5, date: "14.08.2026", text: "Трудоустройство на электростанции и заводы региона гарантировано." }
+        ]
+      },
+      {
+        id: "vktu",
+        name: "ВКТУ им. Д. Серикбаева",
+        shortName: "ВКТУ",
+        city: "Усть-Каменогорск",
+        type: "Технический исследовательский",
+        cost: "От 850 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.6,
+        programsCount: 36,
+        image: "images/vktu.jpg",
+        description: "Технический флагман Восточного Казахстана: цветная металлургия, машиностроение и IT.",
+        reviews: [
+          { author: "Кирилл", rating: 5, date: "19.08.2026", text: "Сотрудничество с УМЗ и Казцинком дает возможность сразу работать по специальности." }
+        ]
+      },
+      {
+        id: "aogu",
+        name: "Атырауский университет нефти и газа им. Утебаева (АУНГ)",
+        shortName: "АУНГ",
+        city: "Атырау",
+        type: "Отраслевой нефтегазовый",
+        cost: "От 950 000 ₸ / год",
+        grant: "Государственные и отраслевые гранты",
+        rating: 4.5,
+        programsCount: 20,
+        image: "images/aung.jpg",
+        description: "Специализированный нефтегазовый университет Казахстана для шельфовой и сухопутной добычи углеводородов.",
+        reviews: [
+          { author: "Нурлан", rating: 5, date: "28.08.2026", text: "Прямые контракты на практику с ТШО, NCOC и КазМунайГаз." }
+        ]
+      },
+      {
+        id: "dulaty",
+        name: "Таразский региональный университет им. М.Х. Дулати",
+        shortName: "ТарРУ",
+        city: "Тараз",
+        type: "Региональный многопрофильный",
+        cost: "От 720 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.3,
+        programsCount: 40,
+        image: "images/dulaty.jpg",
+        description: "Многопрофильный университет, объединяющий водное хозяйство, гидромелиорацию и строительство.",
+        reviews: [
+          { author: "Мерей", rating: 4, date: "05.08.2026", text: "Уникальные специалисты по водному хозяйству готовятся именно здесь." }
+        ]
+      },
+      {
+        id: "ksu",
+        name: "КРУ им. А. Байтұрсынұлы",
+        shortName: "КРУ",
+        city: "Костанай",
+        type: "Региональный исследовательский",
+        cost: "От 750 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.4,
+        programsCount: 35,
+        image: "images/kru.jpg",
+        description: "Академический центр Северного Казахстана: точное земледелие, селекция, машиностроение и IT.",
+        reviews: [
+          { author: "Елена", rating: 5, date: "11.08.2026", text: "Очень мощная школа агрономии и ветеринарии." }
+        ]
+      },
+      {
+        id: "kozybayev",
+        name: "Kozybayev University",
+        shortName: "КУ им. Козыбаева",
+        city: "Петропавловск",
+        type: "Классический с международным партнерством",
+        cost: "От 750 000 ₸ / год",
+        grant: "Государственный грант РК",
+        rating: 4.5,
+        programsCount: 34,
+        image: "images/kozybayev.jpg",
+        description: "Региональный вуз с международной двудипломной программой с University of Arizona (США).",
+        reviews: [
+          { author: "Руслан", rating: 5, date: "25.08.2026", text: "Программа Arizona дает американские кредиты и передовые знания." }
         ]
       }
     ];
 
     let currentModalUniId = null;
 
-    // Инициализация отзывов в localStorage
     function getStoredUnis() {
       const stored = localStorage.getItem('uniguide_unis_data');
-      if (stored) return JSON.parse(stored);
-      localStorage.setItem('uniguide_unis_data', JSON.stringify(fullUnis));
-      return fullUnis;
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length >= allKazakhstanUnis.length) {
+            return parsed;
+          }
+        } catch (e) {}
+      }
+      localStorage.setItem('uniguide_unis_data', JSON.stringify(allKazakhstanUnis));
+      return allKazakhstanUnis;
     }
 
     function renderCards() {
       const unis = getStoredUnis();
-      const search = document.getElementById('searchInput').value.toLowerCase();
+      const search = document.getElementById('searchInput').value.toLowerCase().trim();
       const city = document.getElementById('cityFilter').value;
       const sort = document.getElementById('sortFilter').value;
       const favs = JSON.parse(localStorage.getItem('uniguide_favorites') || '[]');
 
       let filtered = unis.filter(u => {
-        const matchesSearch = u.name.toLowerCase().includes(search) || u.description.toLowerCase().includes(search);
+        const matchesSearch = u.name.toLowerCase().includes(search) || 
+                              u.description.toLowerCase().includes(search) ||
+                              u.shortName.toLowerCase().includes(search) ||
+                              u.city.toLowerCase().includes(search);
         const matchesCity = (city === 'all') || (u.city === city);
         return matchesSearch && matchesCity;
       });
@@ -296,9 +566,18 @@
       if (sort === 'programs') filtered.sort((a,b) => b.programsCount - a.programsCount);
       if (sort === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
 
+      document.getElementById('totalFoundBadge').textContent = `Найдено вузов: ${filtered.length}`;
+
       const container = document.getElementById('unisList');
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="col-span-full py-16 text-center text-slate-400">Университетов по заданным параметрам не найдено</div>`;
+        container.innerHTML = `
+          <div class="col-span-full py-16 text-center text-slate-400">
+            <i data-lucide="building" class="w-12 h-12 mx-auto text-slate-300 mb-2"></i>
+            <p class="font-medium text-slate-600">Университетов по заданным параметрам не найдено</p>
+            <p class="text-xs text-slate-400 mt-1">Попробуйте выбрать другой город или очистить поисковый запрос</p>
+          </div>
+        `;
+        lucide.createIcons();
         return;
       }
 
@@ -358,6 +637,9 @@
       document.getElementById('modalGrant').textContent = uni.grant;
       document.getElementById('modalPrograms').textContent = uni.programsCount;
       document.getElementById('modalImg').src = uni.image;
+      document.getElementById('modalImg').onerror = function() {
+        this.src = 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80';
+      };
 
       renderReviews(uni.reviews || []);
       document.getElementById('uniModal').classList.remove('hidden');
@@ -373,7 +655,7 @@
       const container = document.getElementById('reviewsContainer');
       document.getElementById('reviewsCountBadge').textContent = `${reviews.length} отзывов`;
       if (reviews.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-400 py-3">Пока нет отзывов. Будьте первым!</p>`;
+        container.innerHTML = `<p class="text-xs text-slate-400 py-3">Пока нет отзывов об этом университете. Оставьте отзыв первым!</p>`;
         return;
       }
       container.innerHTML = reviews.map(r => `
@@ -433,14 +715,14 @@
       let list = JSON.parse(localStorage.getItem('uniguide_compare') || '[]');
       if (!list.includes(id)) {
         if (list.length >= 3) {
-          alert('В сравнение можно добавить максимум 3 университета.');
+          alert('В сравнение можно одновременно добавить не более 3 университетов.');
           return;
         }
         list.push(id);
         localStorage.setItem('uniguide_compare', JSON.stringify(list));
-        alert('Добавлено в таблицу сравнения!');
+        alert('Университет добавлен в сравнение! Перейдите на вкладку «Сравнение & Инструменты».');
       } else {
-        alert('Этот вуз уже добавлен в список сравнения.');
+        alert('Этот университет уже добавлен в таблицу сравнения.');
       }
     }
 
@@ -458,7 +740,6 @@
       updateFavBadge();
       lucide.createIcons();
 
-      // Открытие модального окна по URL query parameter (например: ?id=nu)
       const params = new URLSearchParams(window.location.search);
       const openId = params.get('id');
       if (openId) {
